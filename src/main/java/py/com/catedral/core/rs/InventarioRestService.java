@@ -1,5 +1,8 @@
 package py.com.catedral.core.rs;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +15,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.codec.binary.Base64;
+
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.Payload;
+import com.nimbusds.jose.crypto.MACSigner;
 
 import py.com.catedral.core.exceptions.AppException;
 import py.com.catedral.core.exceptions.BusinessException;
@@ -102,8 +114,41 @@ public class InventarioRestService {
 		
 //		System.out.println(new String(Base64.decodeBase64(request.getHeader("Authorization").getBytes())));
 		
-		inventarioService.login(params.getUsuario(), params.getClave());
+//		if (inventarioService.login(params.getUsuario(), params.getClave())){
 		
-		return Response.ok().build();
+			// Create JWS payload
+			Payload payload = new Payload(params.getUsuario());
+	
+			// Create JWS header with HS256 algorithm
+			JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
+	
+			// Create JWS object
+			JWSObject jwsObject = new JWSObject(header, payload);
+	
+			// Create HMAC signer
+			String sharedKey = "a0a2abd8616241c383d61cf559b46afc";
+	
+			JWSSigner signer = new MACSigner(sharedKey.getBytes());
+			try {
+				jwsObject.sign(signer);
+			} catch (JOSEException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+			// Serialise JWS object to compact format
+			String token = jwsObject.serialize();
+			System.out.println("Serialised JWS object: " + token);
+			Map<String,String> res = new HashMap<String, String>();
+			res.put("token", token);
+			
+			return Response
+					.ok()
+					.entity(res)
+					.build();
+//		}
+//		else{
+//			return Response.status(Status.FORBIDDEN).build();
+//		}
 	}
 }
