@@ -1,5 +1,6 @@
 package py.com.catedral.core.rs;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,9 +16,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.codec.binary.Base64;
+import net.minidev.json.JSONObject;
+import py.com.catedral.core.persistence.entities.Producto;
+import py.com.catedral.core.services.commons.InventarioService;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -26,11 +28,9 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
-
+//import org.codehaus.jettison.json.JSONObject;
 import py.com.catedral.core.exceptions.AppException;
 import py.com.catedral.core.exceptions.BusinessException;
-import py.com.catedral.core.persistence.entities.Producto;
-import py.com.catedral.core.services.commons.InventarioService;
 
 @Path("/inventario")
 @Produces(MediaType.APPLICATION_JSON)
@@ -115,9 +115,17 @@ public class InventarioRestService {
 //		System.out.println(new String(Base64.decodeBase64(request.getHeader("Authorization").getBytes())));
 		
 //		if (inventarioService.login(params.getUsuario(), params.getClave())){
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.HOUR, 12);
+		
+			JSONObject jsonPayLoad = new JSONObject();
+			jsonPayLoad.put("iss", request.getHeader("host"));
+			jsonPayLoad.put("sub", params.getUsuario());
+			jsonPayLoad.put("iat", System.currentTimeMillis());
+			jsonPayLoad.put("exp", cal.getTimeInMillis());
 		
 			// Create JWS payload
-			Payload payload = new Payload(params.getUsuario());
+			Payload payload = new Payload(jsonPayLoad);
 	
 			// Create JWS header with HS256 algorithm
 			JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
