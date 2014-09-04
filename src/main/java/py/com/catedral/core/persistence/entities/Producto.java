@@ -17,8 +17,9 @@
 package py.com.catedral.core.persistence.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedNativeQueries;
@@ -36,7 +37,7 @@ import javax.validation.constraints.Size;
 	@NamedNativeQuery(
 	name = "Producto.callInventarioStoreProcedure",
 //	query = "begin GET_SINGLE_PRODUCT_INFO(?, ?, ?, ?, ?); end;")
-	query = "{? = call GET_PRODUCT_INFO(:P_CODIGO) }", resultClass = Producto.class, hints = {
+	query = "{call PROC_PA_INVENTARIO_CURSOR(?, :P_CODIGO_BARRAS, :P_CODIGO_INVENTARIO, :P_FECHA_PROCESO)}", resultClass = Producto.class, hints = {
 		@javax.persistence.QueryHint(name = "org.hibernate.callable", value = "true") })
 })
 @Entity
@@ -47,63 +48,196 @@ public class Producto implements Serializable{
 	@Id
 	@NotNull(message="{producto.codigo_producto_not_null}")
 	@Size(max=10,message="{producto.codigo_producto_size}")
-	private String codigo;
+	@Column(name="p_cod_producto")
+	private String codigoProducto;
+	
+	@NotNull(message="{producto.codigo_barra_not_null}")
+	@Size(max=10,message="{producto.codigo_barra_size}")
+	@Column(name="p_cod_barra")
+	private String codigoBarra;
+	
+	@NotNull(message="{producto.codigo_inventario_not_null}")
+	@Size(max=10,message="{producto.codigo_inventario_size}")
+	@Column(name="p_cod_inventario")
+	private Long codigoInventario;
 
-	@NotNull(message="{producto.descripcion_producto_not_null}")
-	@Size(max=100,message="{producto.descripcion_producto_size}")
-	private String descripcion;
-
+	@NotNull(message="{producto.fecha_proceso_not_null}")
+	@Size(max=10,message="{producto.fecha_proceso_size}")
+	@Column(name="p_fec_proceso")
+	private Date fechaProceso;
+	
+	@NotNull(message="{producto.indicador_exito_not_null}")
+	@Size(max=100,message="{producto.indicador_exito_size}")
+	@Column(name="p_ind_exito")
+	private String indicadorExito;
+	
+	@NotNull(message="{producto.indicador_producto_leido_not_null}")
+	@Size(max=100,message="{producto.indicador_producto_leido_size}")
+	@Column(name="p_ind_prod_leido")
+	private String indicadorProductoLeido;
+	
+	@NotNull(message="{producto.indicador_lote_leido_not_null}")
+	@Size(max=100,message="{producto.indicador_lote_leido_size}")
+	@Column(name="p_lote_leido")
+	private String loteLeido;
+	
 	@NotNull(message="{producto.vencimiento_producto_not_null}")
 	@Size(max=10,message="{producto.vencimiento_producto_size}")
-	private String vencimiento;
+	@Column(name="p_fec_venc_prod")
+	private Date vencimiento;
+	
+	@NotNull(message="{producto.nombre_producto_not_null}")
+	@Size(max=100,message="{producto.nombre_producto_size}")
+	@Column(name="p_nombre_prod")
+	private String nombreProducto;
 
-	@NotNull(message="{producto.lote_producto_not_null}")
-	@Size(max=50,message="{producto.lote_producto_size}")
-	private String lote;
+	@NotNull(message="{producto.codigo_proveedor_not_null}")
+	@Size(max=10,message="{producto.codigo_proveedor_size}")
+	@Column(name="p_prov_codigo")
+	private Long codigoProveedor;
+	
+	@NotNull(message="{producto.nombre_proveedor_not_null}")
+	@Size(max=100,message="{producto.nombre_proveedor_size}")
+	@Column(name="p_prov_nombre")
+	private String nombreProveedor;
 
-	@NotNull(message="{producto.cantidad_producto_not_null}")
-	@Size(max=10,message="{producto.cantidad_producto_size}")
-	private String cantidad;
-
-	public String getCodigo() {
-		return codigo;
+	/**
+	 * @return the nombreProveedor
+	 */
+	public String getNombreProveedor() {
+		return nombreProveedor;
+	}
+	/**
+	 * @param nombreProveedor the nombreProveedor to set
+	 */
+	public void setNombreProveedor(String nombreProveedor) {
+		this.nombreProveedor = nombreProveedor;
+	}
+	/**
+	 * @return the codigoBarra
+	 */
+	public String getCodigoBarra() {
+		return codigoBarra;
+	}
+	/**
+	 * @param codigoBarra the codigoBarra to set
+	 */
+	public void setCodigoBarra(String codigoBarra) {
+		//	codigoBarra == null ? null : codigoBarra.trim();
+		this.codigoBarra = codigoBarra;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo == null ? null : codigo.trim();
+	/**
+	 * @return the codigoInventario
+	 */
+	public Long getCodigoInventario() {
+		return codigoInventario;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	/**
+	 * @param codigoInventario the codigoInventario to set
+	 */
+	public void setCodigoInventario(Long codigoInventario) {
+		this.codigoInventario = codigoInventario;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion == null ? null : descripcion.trim();
+	/**
+	 * @return the fechaProceso
+	 */
+	public Date getFechaProceso() {
+		return fechaProceso;
 	}
 
-	public String getVencimiento() {
+	/**
+	 * @param fechaProceso the fechaProceso to set
+	 */
+	public void setFechaProceso(Date fechaProceso) {
+		this.fechaProceso = fechaProceso;
+	}
+
+	/**
+	 * @return the indicadorExito
+	 */
+	public String getIndicadorExito() {
+		return indicadorExito;
+	}
+
+	/**
+	 * @param indicadorExito the indicadorExito to set
+	 */
+	public void setIndicadorExito(String indicadorExito) {
+		this.indicadorExito = indicadorExito;
+	}
+
+	/**
+	 * @return the indicadorProductoLeido
+	 */
+	public String getIndicadorProductoLeido() {
+		return indicadorProductoLeido;
+	}
+
+	/**
+	 * @param indicadorProductoLeido the indicadorProductoLeido to set
+	 */
+	public void setIndicadorProductoLeido(String indicadorProductoLeido) {
+		this.indicadorProductoLeido = indicadorProductoLeido;
+	}
+
+	/**
+	 * @return the loteLeido
+	 */
+	public String getLoteLeido() {
+		return loteLeido;
+	}
+
+	/**
+	 * @param loteLeido the loteLeido to set
+	 */
+	public void setLoteLeido(String loteLeido) {
+		this.loteLeido = loteLeido;
+	}
+
+	/**
+	 * @return the vencimiento
+	 */
+	public Date getVencimiento() {
 		return vencimiento;
 	}
 
-	public void setVencimiento(String vencimiento) {
+	/**
+	 * @param vencimiento the vencimiento to set
+	 */
+	public void setVencimiento(Date vencimiento) {
 		this.vencimiento = vencimiento;
 	}
 
-	public String getLote() {
-		return lote;
+	/**
+	 * @return the nombreProducto
+	 */
+	public String getNombreProducto() {
+		return nombreProducto;
 	}
 
-	public void setLote(String lote) {
-		this.lote = lote == null ? null : lote.trim();
+	/**
+	 * @param nombreProducto the nombreProducto to set
+	 */
+	public void setNombreProducto(String nombreProducto) {
+		this.nombreProducto = nombreProducto;
 	}
 
-	public String getCantidad() {
-		return cantidad;
+	/**
+	 * @return the codigoProveedor
+	 */
+	public Long getCodigoProveedor() {
+		return codigoProveedor;
 	}
 
-	public void setCantidad(String cantidad) {
-		this.cantidad = cantidad == null ? "0" : cantidad;
+	/**
+	 * @param codigoProveedor the codigoProveedor to set
+	 */
+	public void setCodigoProveedor(Long codigoProveedor) {
+		this.codigoProveedor = codigoProveedor;
 	}
-	
+
 	
 }

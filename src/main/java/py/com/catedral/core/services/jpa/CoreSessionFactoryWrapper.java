@@ -24,19 +24,19 @@ public class CoreSessionFactoryWrapper {//extends SessionFactoryWrapper {
 	public EntityManager getEntityManager(String usuario, String clave){
 //		if (em == null){
 			Map<String, Object> properties = new HashMap<>();
-//			properties.put("javax.persistence.jdbc.url", "jdbc:oracle:thin:@127.0.0.1:1521:XE");
-//			properties.put("javax.persistence.jdbc.driver", "oracle.jdbc.driver.OracleDriver");
-//			properties.put("javax.persistence.jdbc.dialect", "org.hibernate.dialect.Oracle10gDialect");
-//			properties.put("javax.persistence.jdbc.Schema", "CATEDRAL");
-//			properties.put("javax.persistence.jdbc.user", usuario);
-//			properties.put("javax.persistence.jdbc.password", clave);
+			properties.put("javax.persistence.jdbc.url", "jdbc:oracle:thin:@127.0.0.1:1521:XE");
+			properties.put("javax.persistence.jdbc.driver", "oracle.jdbc.driver.OracleDriver");
+			properties.put("javax.persistence.jdbc.dialect", "org.hibernate.dialect.Oracle10gDialect");
+			properties.put("javax.persistence.jdbc.Schema", "CATEDRAL");
+			properties.put("javax.persistence.jdbc.user", usuario);
+			properties.put("javax.persistence.jdbc.password", clave);
 			
-			properties.put("hibernate.connection.driver_class", "oracle.jdbc.driver.OracleDriver");
-			properties.put("hibernate.connection.url", "jdbc:oracle:thin:@10.129.4.154:1521:kmldev2");
-			properties.put("hibernate.connection.username", usuario);
-			properties.put("hibernate.connection.password", clave);
-			properties.put("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
-			properties.put("hibernate.default_schema", "DBADMIN");
+//			properties.put("hibernate.connection.driver_class", "oracle.jdbc.driver.OracleDriver");
+//			properties.put("hibernate.connection.url", "jdbc:oracle:thin:@10.129.4.154:1521:kmldev2");
+//			properties.put("hibernate.connection.username", usuario);
+//			properties.put("hibernate.connection.password", clave);
+//			properties.put("hibernate.dialect", "org.hibernate.dialect.Oracle10gDialect");
+//			properties.put("hibernate.default_schema", "DBADMIN");
 			properties.put("show_sql", "true");
 			properties.put("connection.pool_size", "1");
 			EntityManagerFactory emf =

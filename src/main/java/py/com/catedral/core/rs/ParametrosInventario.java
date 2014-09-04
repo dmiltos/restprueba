@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ParametrosInventario extends CredencialesCliente{
 	
 	private String codigoBarras;
-	private String codigoInventario;
+	private Long codigoInventario;
 	/**
 	 * @return the codigoBarras
 	 */
@@ -42,13 +42,13 @@ public class ParametrosInventario extends CredencialesCliente{
 	/**
 	 * @return the codigoInventario
 	 */
-	public String getCodigoInventario() {
+	public Long getCodigoInventario() {
 		return codigoInventario;
 	}
 	/**
 	 * @param codigoInventario the codigoInventario to set
 	 */
-	public void setCodigoInventario(String codigoInventario) {
+	public void setCodigoInventario(Long codigoInventario) {
 		this.codigoInventario = codigoInventario;
 	}
 

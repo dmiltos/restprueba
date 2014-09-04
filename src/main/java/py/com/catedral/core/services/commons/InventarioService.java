@@ -2,8 +2,7 @@ package py.com.catedral.core.services.commons;
 
 import static py.com.catedral.core.services.utils.ValidationUtil.validarArgumento;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.Date;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -59,8 +58,44 @@ public class InventarioService {
 		}
 		return false;
 	}
+	
+	/**
+	 * Procedimiento funcionando
+	 * 
+	 * @param codigoDeBarras
+	 * @param codigoDeInventario
+	 * @param cantidad
+	 * @param usuario
+	 * @param clave
+	 * @return
+	 * @throws AppException
+	 * @throws BusinessException
+	 */
+	public Producto inventariar(String codigoDeBarras, Long codigoDeInventario, Integer cantidad,
+			String usuario, String clave) throws AppException, BusinessException {
 
-	public Producto inventariar(String codigoDeBarras, String codigoDeInventario, Integer cantidad,
+		validarArgumento(codigoDeBarras, "El objeto codigo de barras no puede ser nulo");
+
+		try {
+
+			Query q = factory.getEntityManager(usuario, clave).createNamedQuery("Producto.callInventarioStoreProcedure");
+			
+			q.setParameter("P_CODIGO_BARRAS", codigoDeBarras); // IN parameter
+			q.setParameter("P_CODIGO_INVENTARIO", codigoDeInventario); // IN parameter
+			q.setParameter("P_FECHA_PROCESO", new Date(System.currentTimeMillis())); // IN parameter
+			
+			Producto prod = (Producto) q.getSingleResult();
+			
+			return prod;
+		
+		} catch (Exception ae) {
+			throw new AppException.InternalError(ae.getMessage());
+		} finally {
+			
+		}
+	}
+
+	/*public Producto inventariar(String codigoDeBarras, String codigoDeInventario, Integer cantidad,
 			String usuario, String clave) throws AppException, BusinessException {
 
 		validarArgumento(codigoDeBarras, "El objeto codigo de barras no puede ser nulo");
@@ -70,67 +105,31 @@ public class InventarioService {
 			//LLAMAMOS AL PROCEDIMIENTO QUE VERIFICA QUE EL PRODUCTO ESTE EN EL CODIGO DE INVENTARIO
 			
 			
-//			Connection c = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:XE", usuario, clave);
+			Connection c = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:XE", usuario, clave);
 //			CallableStatement cs = c.prepareCall("CALL GET_SINGLE_PRODUCT_INFO(:P_CODIGO, :P_DESCRIPCION, :P_VENCIMIENTO, :P_LOTE, :P_CANTIDAD)");
-//			CallableStatement cs = c.prepareCall("begin GET_SINGLE_PRODUCT_INFO(?, ?, ?, ?, ?); end;");
-			Query q = factory.getEntityManager(usuario, clave).createNamedQuery("Producto.callInventarioStoreProcedure");
-//			cs.setString(1, codigoDeBarras);
-//			cs.registerOutParameter(2, Types.VARCHAR);
+			CallableStatement cs = c.prepareCall("begin GET_SINGLE_PRODUCT_INFO(?, ?, ?, ?, ?); end;");
+			cs.setString(1, codigoDeBarras);
+			cs.registerOutParameter(2, Types.VARCHAR);
 //
-//			cs.registerOutParameter(3, Types.VARCHAR);
+			cs.registerOutParameter(3, Types.VARCHAR);
 //
-//			cs.registerOutParameter(4, Types.VARCHAR);
+			cs.registerOutParameter(4, Types.VARCHAR);
 //
-//			cs.registerOutParameter(5, Types.VARCHAR);
+			cs.registerOutParameter(5, Types.VARCHAR);
 			
-//			q.setParameter(1, result);
-			q.setParameter("P_CODIGO", codigoDeBarras); // IN parameter
-//			q.setParameter("codigoInventario", codigoDeInventario); // IN parameter
-//			q.setParameter(2, descripcion); // OUT parameter
-//			q.setParameter(3, vencimiento); // OUT parameter
-//			q.setParameter(4, lote); // OUT parameter
-//			q.setParameter(5, cant); // OUT parameter
-//			cs.execute();
-			Producto prod = (Producto) q.getSingleResult();
-//			System.out.println(cs.getString(2));
-//			cs.set
-			
-//			Producto singleResult = (Producto) q.getSingleResult();
-//			final List<Map<String, Object>> results = mapper.chequearProductoValidoParaInventario(params);
-			return prod;
-//			for(final Map<String, Object> producto : results)
-//			{
-//				p = new Producto();
-//				System.out.println(producto.get("title"));
-//			}
+			cs.execute();
 
-//			if (params.getTotalFilas() <= 0){
-//				throw new AppException.ResourceNotFoundException("El producto que desea inventariar no corresponde al codigo de inventario.");
-//			}else{
-//				
-//			}
+			System.out.println(cs.getString(2));
+			
+
+			return new Producto();
 
 		} catch (Exception ae) {
 			throw new AppException.InternalError(ae.getMessage());
 		} finally {
 			
 		}
-		//		try {
-		//
-		//			session = factory.getSqlSession();
-		//			CiudadesMapper mapper = session.getMapper(CiudadesMapper.class);
-		//			mapper.insert(ciudad);
-		//
-		//		} catch (Exception e) {
-		//			throw new AppException.InternalError(e.getMessage());
-		//		} finally {
-		//			if (session != null) {
-		//				session.close();
-		//			}
-		//		}
-		//		return ciudad;
-
-	}
+	}*/
 
 
 

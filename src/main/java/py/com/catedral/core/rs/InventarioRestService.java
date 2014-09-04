@@ -16,8 +16,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import net.minidev.json.JSONObject;
+//import org.codehaus.jettison.json.JSONObject;
+import py.com.catedral.core.exceptions.AppException;
+import py.com.catedral.core.exceptions.BusinessException;
 import py.com.catedral.core.persistence.entities.Producto;
 import py.com.catedral.core.services.commons.InventarioService;
 
@@ -28,9 +32,6 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
-//import org.codehaus.jettison.json.JSONObject;
-import py.com.catedral.core.exceptions.AppException;
-import py.com.catedral.core.exceptions.BusinessException;
 
 @Path("/inventario")
 @Produces(MediaType.APPLICATION_JSON)
@@ -114,7 +115,7 @@ public class InventarioRestService {
 		
 //		System.out.println(new String(Base64.decodeBase64(request.getHeader("Authorization").getBytes())));
 		
-//		if (inventarioService.login(params.getUsuario(), params.getClave())){
+		if (inventarioService.login(params.getUsuario(), params.getClave())){
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.HOUR, 12);
 		
@@ -154,9 +155,9 @@ public class InventarioRestService {
 					.ok()
 					.entity(res)
 					.build();
-//		}
-//		else{
-//			return Response.status(Status.FORBIDDEN).build();
-//		}
+		}
+		else{
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 	}
 }
