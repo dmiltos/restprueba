@@ -1,5 +1,6 @@
 package py.com.catedral.core.rs;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +31,10 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 
 @Path("/inventario")
 @Produces(MediaType.APPLICATION_JSON)
@@ -40,7 +43,8 @@ import com.nimbusds.jose.crypto.MACSigner;
 public class InventarioRestService {
 	
 	@Inject
-	private InventarioService inventarioService;
+	private InventarioService inventarioService;	
+	private String sharedKey = "a0a2abd8616241c383d61cf559b46afc";
 
 	@GET
 	@Path("/{parametro}")
@@ -105,6 +109,56 @@ public class InventarioRestService {
 		return Response.ok(x).build();
 	}
 	
+	@GET
+	@Path("/api/me")
+	public Response ensureAuthenticated(CredencialesCliente params, @Context HttpServletRequest request){
+		
+		Map<String,String> res = new HashMap<String, String>();
+		
+		// Parse back and check signature
+		JWSObject jwsObject = null;
+		try {
+			jwsObject = JWSObject.parse(request.getHeader("authorization"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		JWSVerifier verifier = new MACVerifier(sharedKey.getBytes());
+
+		boolean verifiedSignature = false;
+		try {
+			verifiedSignature = jwsObject.verify(verifier);
+		} catch (JOSEException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (verifiedSignature)
+			System.out.println("Verified JWS signature!");
+		else
+			System.out.println("Bad JWS signature!");
+		System.out.println("Recovered payload message: " + jwsObject.getPayload());
+		
+		JSONObject jsonPayLoad = jwsObject.getPayload().toJSONObject();
+		Long exp = (Long) jsonPayLoad.get("exp");
+		
+		if (exp <= System.currentTimeMillis()){
+			res.put("message", "session expired");
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity(res)
+					.build();
+		}
+		else{
+			return Response
+					.ok()
+					.entity(res)
+					.build();
+		}
+
+	}
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -114,13 +168,14 @@ public class InventarioRestService {
 //		System.out.println(request.getHeader("Authorization"));
 		
 //		System.out.println(new String(Base64.decodeBase64(request.getHeader("Authorization").getBytes())));
+		Map<String,String> res = new HashMap<String, String>();
 		
-		if (inventarioService.login(params.getUsuario(), params.getClave())){
+//		if (inventarioService.login(params.getUsuario(), params.getClave())){
 			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.HOUR, 12);
+			cal.add(Calendar.MINUTE, 1);
 		
 			JSONObject jsonPayLoad = new JSONObject();
-			jsonPayLoad.put("iss", request.getHeader("host"));
+			jsonPayLoad.put("iss", request.getHeader("origin"));
 			jsonPayLoad.put("sub", params.getUsuario());
 			jsonPayLoad.put("iat", System.currentTimeMillis());
 			jsonPayLoad.put("exp", cal.getTimeInMillis());
@@ -135,8 +190,6 @@ public class InventarioRestService {
 			JWSObject jwsObject = new JWSObject(header, payload);
 	
 			// Create HMAC signer
-			String sharedKey = "a0a2abd8616241c383d61cf559b46afc";
-	
 			JWSSigner signer = new MACSigner(sharedKey.getBytes());
 			try {
 				jwsObject.sign(signer);
@@ -148,16 +201,20 @@ public class InventarioRestService {
 			// Serialise JWS object to compact format
 			String token = jwsObject.serialize();
 			System.out.println("Serialised JWS object: " + token);
-			Map<String,String> res = new HashMap<String, String>();
+			
 			res.put("token", token);
 			
 			return Response
 					.ok()
 					.entity(res)
 					.build();
-		}
-		else{
-			return Response.status(Status.UNAUTHORIZED).build();
-		}
+//		}
+//		else{
+//			res.put("message:", "access denied");
+//			return Response
+//					.status(Status.UNAUTHORIZED)
+//					.entity(res)
+//					.build();
+//		}
 	}
 }

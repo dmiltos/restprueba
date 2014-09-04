@@ -172,7 +172,11 @@
 			<version>3.1.1</version>
 		</dependency>
 
-		
+		<dependency>
+	   		<groupId>cn.guoyukun.jdbc</groupId>
+	    	<artifactId>oracle-ojdbc6</artifactId>
+	    	<version>11.2.0.3.0</version>
+		</dependency>
 
 	</dependencies>
 
@@ -280,19 +284,6 @@
 				<groupId>javax.validation</groupId>
 				<artifactId>validation-api</artifactId>
 				<version>1.1.0.Final</version>
-			</dependency>
-
-<!-- 			<dependency> -->
-<!-- 				<groupId>com.oracle</groupId> -->
-<!-- 				<artifactId>ojdbc6</artifactId> -->
-<!-- 				<version>11.2.0</version> -->
-<!-- 			</dependency> -->
-			<dependency>
-			    <groupId>com.oracle</groupId>
-			    <artifactId>ojdbc</artifactId>
-			    <version>14</version>
-			    <scope>system</scope>
-			    <systemPath>${basedir}/lib/ojdbc6.jar</systemPath> <!-- must match file name -->
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
