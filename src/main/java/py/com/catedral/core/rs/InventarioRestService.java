@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -90,7 +91,7 @@ public class InventarioRestService {
 		return mov;
 	}
 	
-	@POST
+	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/inventariar")
@@ -99,7 +100,7 @@ public class InventarioRestService {
 		Producto x = null;
 		try {
 			x = inventarioService.inventariar(params.getCodigoBarras(), 
-					params.getCodigoInventario(), 0, "catedral", "catedral");
+					params.getCodigoInventario(), 0, "system", "manager");
 			
 		} catch (AppException | BusinessException e) {
 			
@@ -110,7 +111,7 @@ public class InventarioRestService {
 	}
 	
 	@GET
-	@Path("/api/me")
+	@Path("/verifyAuth")
 	public Response ensureAuthenticated(CredencialesCliente params, @Context HttpServletRequest request){
 		
 		Map<String,String> res = new HashMap<String, String>();
@@ -170,7 +171,7 @@ public class InventarioRestService {
 //		System.out.println(new String(Base64.decodeBase64(request.getHeader("Authorization").getBytes())));
 		Map<String,String> res = new HashMap<String, String>();
 		
-//		if (inventarioService.login(params.getUsuario(), params.getClave())){
+		if (inventarioService.login(params.getUsuario(), params.getClave())){
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MINUTE, 1);
 		
@@ -208,13 +209,13 @@ public class InventarioRestService {
 					.ok()
 					.entity(res)
 					.build();
-//		}
-//		else{
-//			res.put("message:", "access denied");
-//			return Response
-//					.status(Status.UNAUTHORIZED)
-//					.entity(res)
-//					.build();
-//		}
+		}
+		else{
+			res.put("message:", "access denied");
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity(res)
+					.build();
+		}
 	}
 }

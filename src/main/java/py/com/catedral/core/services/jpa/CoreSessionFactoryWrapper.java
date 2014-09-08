@@ -24,7 +24,7 @@ public class CoreSessionFactoryWrapper {//extends SessionFactoryWrapper {
 	public EntityManager getEntityManager(String usuario, String clave){
 //		if (em == null){
 			Map<String, Object> properties = new HashMap<>();
-			properties.put("javax.persistence.jdbc.url", "jdbc:oracle:thin:@10.129.4.154:1521:kmldev2");
+			properties.put("javax.persistence.jdbc.url", "jdbc:oracle:thin:@127.0.0.1:1521:XE");
 			properties.put("javax.persistence.jdbc.driver", "oracle.jdbc.driver.OracleDriver");
 			properties.put("javax.persistence.jdbc.dialect", "org.hibernate.dialect.Oracle10gDialect");
 			properties.put("javax.persistence.jdbc.Schema", "DBADMIN");
