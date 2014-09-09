@@ -13,7 +13,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -46,50 +45,6 @@ public class InventarioRestService {
 	@Inject
 	private InventarioService inventarioService;	
 	private String sharedKey = "a0a2abd8616241c383d61cf559b46afc";
-
-	@GET
-	@Path("/{parametro}")
-	public Response devolverMensaje(@PathParam("parametro") String msg) {
-
-		String salida = "Ejemplo restful con Jersey : " + msg;
-
-		return Response.status(200).entity(salida).build();
-
-	}
-
-	@GET
-	@Path("/get")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Alumno getAlumno() {
-		Alumno alu = new Alumno();
-		alu.setId(17);
-		alu.setCedula("1234567");
-		alu.setNombre("Matteo");
-		alu.setApellido("Rodr�guez");
-		return alu;
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public DetalleParametroDTO getDetalleParametro(){
-		DetalleParametroDTO dp = new DetalleParametroDTO();
-		dp.setAbreviatura("ASU");
-		dp.setDescripcion("ASUNCION");
-		dp.setId(15L);
-		return dp;
-	}
-	
-	@GET
-	@Path("/pelicula")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Movie getMovie() {
-		Movie mov = new Movie();
-		mov.setTitle("StarWars");
-		mov.setDirector("Yo");
-		mov.setReleaseYear("1990");
-		mov.setGenre("Science Fiction");
-		return mov;
-	}
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -112,14 +67,18 @@ public class InventarioRestService {
 	
 	@GET
 	@Path("/verifyAuth")
-	public Response ensureAuthenticated(CredencialesCliente params, @Context HttpServletRequest request){
+	@Produces(MediaType.APPLICATION_JSON)	
+	public Response ensureAuthenticated(@Context HttpServletRequest request){
 		
 		Map<String,String> res = new HashMap<String, String>();
+
+		String token = request.getHeader("authorization");
+		token = token.startsWith("Bearer ") ? token.substring(7) : token;
 		
 		// Parse back and check signature
 		JWSObject jwsObject = null;
 		try {
-			jwsObject = JWSObject.parse(request.getHeader("authorization"));
+			jwsObject = JWSObject.parse(token);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,7 +104,7 @@ public class InventarioRestService {
 		Long exp = (Long) jsonPayLoad.get("exp");
 		
 		if (exp <= System.currentTimeMillis()){
-			res.put("message", "session expired");
+			res.put("message", "Sesion expirada");
 			return Response
 					.status(Status.UNAUTHORIZED)
 					.entity(res)
@@ -157,7 +116,6 @@ public class InventarioRestService {
 					.entity(res)
 					.build();
 		}
-
 	}
 	
 	@POST
@@ -211,7 +169,7 @@ public class InventarioRestService {
 					.build();
 		}
 		else{
-			res.put("message:", "access denied");
+			res.put("message", "Acceso denegado");
 			return Response
 					.status(Status.UNAUTHORIZED)
 					.entity(res)
