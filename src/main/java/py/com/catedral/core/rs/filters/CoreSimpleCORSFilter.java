@@ -38,12 +38,16 @@ public class CoreSimpleCORSFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+		System.out.println("ENTRAMOS EN EL FILTER");
+		
 		HttpServletResponse response = (HttpServletResponse) res;
 		HttpServletRequest request = (HttpServletRequest) req;
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
 //		response.setHeader("Access-Control-Max-Age", "3600");
-		response.setHeader("Access-Control-Allow-Headers", "Accept, authorization, Content-Type, Origin");
+		response.setHeader("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, Origin");
+		
+		System.out.println("######################## HEADERS #########################");
 		Enumeration headerNames = request.getHeaderNames();
 		while (headerNames.hasMoreElements()) {
 			String key = (String) headerNames.nextElement();
@@ -51,8 +55,7 @@ public class CoreSimpleCORSFilter implements Filter {
 //			map.put(key, value);
 			System.out.println(key + " :  "  + value);
 		}
-		
-		System.out.println("ENTRAMOS EN EL FILTER");
+		System.out.println("######################## END HEADERS #########################");
 		chain.doFilter(request, response);
 	}
 

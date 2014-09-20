@@ -9,6 +9,9 @@ import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import py.com.catedral.core.exceptions.AppException;
 import py.com.catedral.core.exceptions.BusinessException;
 import py.com.catedral.core.persistence.entities.Producto;
@@ -23,6 +26,8 @@ import py.com.catedral.core.services.jpa.CoreSessionFactoryWrapper;
 
 @Stateless(name = "InventarioService", description = "Servicios para la toma de inventarios")
 public class InventarioService {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@EJB
 	private CoreSessionFactoryWrapper factory;
@@ -53,25 +58,34 @@ public class InventarioService {
 		}
 		if (sysdate != null){
 			java.sql.Timestamp x = (java.sql.Timestamp)sysdate;
-			System.out.println(x);
+			if (x != null){
+				logger.debug("SE AUTENTICO EL USUARIO " + usuario + " a las " + x.toString());
+				
+			}
 			return true;
 		}
 		return false;
 	}
 	
 	/**
-	 * Procedimiento funcionando
+	 * Procedimiento para inventariar productos
 	 * 
 	 * @param codigoDeBarras
 	 * @param codigoDeInventario
+	 * @param indicadorManual
+	 * @param estado
 	 * @param cantidad
+	 * @param lote
+	 * @param vencimiento
+	 * @param indicadorTipoEvento
 	 * @param usuario
 	 * @param clave
 	 * @return
 	 * @throws AppException
 	 * @throws BusinessException
 	 */
-	public Producto inventariar(String codigoDeBarras, Long codigoDeInventario, Integer cantidad,
+	public Producto inventariar(String codigoDeBarras, Long codigoDeInventario, String indicadorManual, String estado, 
+			Float cantidad, String lote, java.util.Date vencimiento, String indicadorTipoEvento,
 			String usuario, String clave) throws AppException, BusinessException {
 
 		validarArgumento(codigoDeBarras, "El objeto codigo de barras no puede ser nulo");
@@ -80,15 +94,43 @@ public class InventarioService {
 
 			Query q = factory.getEntityManager(usuario, clave).createNamedQuery("Producto.callInventarioStoreProcedure");
 			
-			q.setParameter("P_CODIGO_BARRAS", codigoDeBarras); // IN parameter
-			q.setParameter("P_CODIGO_INVENTARIO", codigoDeInventario); // IN parameter
-			q.setParameter("P_FECHA_PROCESO", new Date(System.currentTimeMillis())); // IN parameter
+			q.setParameter("p_cod_barra", codigoDeBarras); // IN parameter
+			q.setParameter("p_cod_inventario", codigoDeInventario); // IN parameter
+			Date fechaProceso = new Date(System.currentTimeMillis());
+			q.setParameter("p_fec_proceso", fechaProceso); // IN parameter
+			q.setParameter("p_ind_manual", indicadorManual); // IN parameter
+			q.setParameter("p_estado", estado); // IN parameter
+			q.setParameter("p_cantidad", cantidad); // IN parameter
+			q.setParameter("p_lote", lote); // IN parameter
+			q.setParameter("p_ind_tipo_evento", indicadorTipoEvento != null && !"".equals(indicadorTipoEvento.trim()) ? indicadorTipoEvento : "WS"); // IN parameter, envia WS por defecto
+			Date fechaVencimiento = null;
+			if (vencimiento != null){
+				fechaVencimiento = new Date(vencimiento.getTime());
+			}
+			q.setParameter("p_vencimiento", fechaVencimiento); // IN parameter
 			
-			Producto prod = (Producto) q.getSingleResult();
-			
+			Producto prod = null;
+			logger.debug("CODIGO DE BARRAS:" + codigoDeBarras);
+			logger.debug("CODIGO DE INVENTARIO:" + codigoDeInventario);
+			logger.debug("FECHA DE PROCESO:" + fechaProceso);
+			logger.debug("CARGA MANUAL?:" + indicadorManual);
+			logger.debug("ESTADO:" + estado);
+			logger.debug("CANTIDAD:" + cantidad);
+			logger.debug("LOTE:" + lote);
+			logger.debug("VENCIMIENTO:" + vencimiento);
+
+			try {
+			  prod = (Producto)q.getSingleResult();
+			  logger.debug("SE INVENTARIO UN PRODUCTO CON LOS SIGUIENTES DATOS:" + prod);
+				
+			} catch (Exception ae) {
+				logger.error("NO SE PUDIERON LEER DATOS DEL PROCEDIMIENTO");
+			}
+
 			return prod;
 		
 		} catch (Exception ae) {
+			logger.error("OCURRIO UN ERROR AL INVENTARIAR:" + ae.getMessage());
 			throw new AppException.InternalError(ae.getMessage());
 		} finally {
 			
@@ -130,40 +172,5 @@ public class InventarioService {
 			
 		}
 	}*/
-
-
-
-
-	/**
-	 * Este m&eacute;todo obtiene todos los registros de la tabla 
-	 * @return				 lista de ciudades encontradas
-	 */
-	//	public List<Ciudades> listar() {
-	//		SqlSession session = null;
-	//		try {
-	//			session = factory.getSqlSession();
-	//
-	//			InventarioMapper mapper = session.getMapper(InventarioMapper.class);
-	//			List<Ciudades> list = mapper.selectByExample(null);
-	//			return list;
-	//		} finally {
-	//			session.close();
-	//		}
-	//	}
-	//
-	//	
-	//	public Integer total() {
-	//		SqlSession session = null;
-	//		try {
-	//
-	//			session = factory.getSqlSession();
-	//			InventarioMapper mapper = session.getMapper(InventarioMapper.class);
-	//			int total = mapper.countByExample(null);
-	//			return total;
-	//
-	//		} finally {
-	//			session.close();
-	//		}
-	//	}
 
 }

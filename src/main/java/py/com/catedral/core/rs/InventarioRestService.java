@@ -52,26 +52,46 @@ public class InventarioRestService {
 	@Path("/inventariar")
 	public Response inventariar(ParametrosInventario params, @Context HttpServletRequest request){
 		//Tomamos las credenciales en base64
-		Producto x = null;
+		Producto prod = null;
+		Map<String,String> res = new HashMap<String, String>();
+		
+		JSONObject jsonPayLoad = decodePayload(request);
+		String user = (String) jsonPayLoad.get("sub");
+		String pass = (String) jsonPayLoad.get("pss");
+		
 		try {
-			x = inventarioService.inventariar(params.getCodigoBarras(), 
-					params.getCodigoInventario(), 0, "system", "manager");
+			prod = inventarioService.inventariar(params.getCodigoBarras(), 
+					params.getCodigoInventario(), params.getIndicadorManual(), "ENPRO", 
+					params.getCantidad(), params.getLote(), params.getVencimiento(), "WS", user, pass);
 			
-		} catch (AppException | BusinessException e) {
-			
+		} catch (AppException | BusinessException e) {			
 			e.printStackTrace();
 		}
 		
-		return Response.ok(x).build();
+		if (prod != null){
+			return Response.ok(prod).build();
+		}
+		else{	
+			return Response.status(Status.NO_CONTENT).entity(res).build();
+		}
 	}
 	
 	@GET
-	@Path("/verifyAuth")
+	@Path("/api/me")
 	@Produces(MediaType.APPLICATION_JSON)	
 	public Response ensureAuthenticated(@Context HttpServletRequest request){
 		
 		Map<String,String> res = new HashMap<String, String>();
+		
+		JSONObject jsonPayLoad = decodePayload(request);
+		return Response
+				.ok()
+				.entity(jsonPayLoad)
+				.build();
+	}
 
+	private JSONObject decodePayload(HttpServletRequest request) {
+				
 		String token = request.getHeader("authorization");
 		token = token.startsWith("Bearer ") ? token.substring(7) : token;
 		
@@ -101,41 +121,33 @@ public class InventarioRestService {
 		System.out.println("Recovered payload message: " + jwsObject.getPayload());
 		
 		JSONObject jsonPayLoad = jwsObject.getPayload().toJSONObject();
-		Long exp = (Long) jsonPayLoad.get("exp");
-		
-		if (exp <= System.currentTimeMillis()){
-			res.put("message", "Sesion expirada");
-			return Response
-					.status(Status.UNAUTHORIZED)
-					.entity(res)
-					.build();
-		}
-		else{
-			return Response
-					.ok()
-					.entity(res)
-					.build();
-		}
+		return jsonPayLoad;
 	}
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/auth")
-	public Response login(CredencialesCliente params, @Context HttpServletRequest request){
-		//Tomamos las credenciales en base64
-//		System.out.println(request.getHeader("Authorization"));
-		
-//		System.out.println(new String(Base64.decodeBase64(request.getHeader("Authorization").getBytes())));
+	public Response login(CredencialesCliente params, @Context HttpServletRequest request){		
+
 		Map<String,String> res = new HashMap<String, String>();
+		
+		if (request.getHeader("authorization") == null){
+			res.put("message", "Header Authorization no encontrado");
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity(res)
+					.build();
+		}
 		
 		if (inventarioService.login(params.getUsuario(), params.getClave())){
 			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.MINUTE, 1);
+			cal.add(Calendar.DAY_OF_YEAR, 1);
 		
 			JSONObject jsonPayLoad = new JSONObject();
 			jsonPayLoad.put("iss", request.getHeader("origin"));
 			jsonPayLoad.put("sub", params.getUsuario());
+			jsonPayLoad.put("pss", params.getClave());
 			jsonPayLoad.put("iat", System.currentTimeMillis());
 			jsonPayLoad.put("exp", cal.getTimeInMillis());
 		

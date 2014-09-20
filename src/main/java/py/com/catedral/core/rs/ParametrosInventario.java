@@ -16,6 +16,8 @@
  
 package py.com.catedral.core.rs;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
  
 /**
@@ -27,6 +29,11 @@ public class ParametrosInventario extends CredencialesCliente{
 	
 	private String codigoBarras;
 	private Long codigoInventario;
+	private String indicadorManual;
+	private Float cantidad;
+	private String lote;
+	private Date vencimiento;
+	
 	/**
 	 * @return the codigoBarras
 	 */
@@ -51,5 +58,55 @@ public class ParametrosInventario extends CredencialesCliente{
 	public void setCodigoInventario(Long codigoInventario) {
 		this.codigoInventario = codigoInventario;
 	}
+	/**
+	 * @return the indicadorManual
+	 */
+	public String getIndicadorManual() {
+		return indicadorManual;
+	}
+	/**
+	 * @param indicadorManual the indicadorManual to set
+	 */
+	public void setIndicadorManual(String indicadorManual) {
+		this.indicadorManual = indicadorManual;
+	}
+	/**
+	 * @return the cantidad
+	 */
+	public Float getCantidad() {
+		return cantidad;
+	}
+	/**
+	 * @param cantidad the cantidad to set
+	 */
+	public void setCantidad(Float cantidad) {
+		this.cantidad = cantidad;
+	}
+	/**
+	 * @return the lote
+	 */
+	public String getLote() {
+		return lote;
+	}
+	/**
+	 * @param lote the lote to set
+	 */
+	public void setLote(String lote) {
+		this.lote = lote;
+	}
+	/**
+	 * @return the vencimiento
+	 */
+	public Date getVencimiento() {
+		return vencimiento;
+	}
+	/**
+	 * @param vencimiento the vencimiento to set
+	 */
+	public void setVencimiento(Date vencimiento) {
+		this.vencimiento = vencimiento;
+	}
+	
 
 }
+

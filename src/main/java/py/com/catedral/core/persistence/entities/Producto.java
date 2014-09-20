@@ -37,8 +37,10 @@ import javax.validation.constraints.Size;
 	@NamedNativeQuery(
 	name = "Producto.callInventarioStoreProcedure",
 //	query = "begin GET_SINGLE_PRODUCT_INFO(?, ?, ?, ?, ?); end;")
-	query = "{call PROC_PA_INVENTARIO_CURSOR(?, :P_CODIGO_BARRAS, :P_CODIGO_INVENTARIO, :P_FECHA_PROCESO)}", resultClass = Producto.class, hints = {
-		@javax.persistence.QueryHint(name = "org.hibernate.callable", value = "true") })
+	query = "{call PA_INVENTARIO(?, :p_cod_barra, :p_cod_inventario, :p_fec_proceso, :p_ind_manual, :p_estado, :p_cantidad, :p_lote, :p_vencimiento, :p_ind_tipo_evento)}", 
+		resultClass = Producto.class, hints = {
+			@javax.persistence.QueryHint(name = "org.hibernate.callable", value = "true") 
+		})
 })
 @Entity
 public class Producto implements Serializable{
@@ -100,7 +102,24 @@ public class Producto implements Serializable{
 	@Size(max=100,message="{producto.nombre_proveedor_size}")
 	@Column(name="p_prov_nombre")
 	private String nombreProveedor;
-
+	
+//	@NotNull(message="{producto.indicador_tipo_evento_not_null}")
+//	@Size(max=100,message="{producto.indicador_tipo_evento_size}")
+//	@Column(name="p_ind_tipo_evento")
+//	private String indicadorTipoEvento;
+//	
+//	@NotNull(message="{producto.indicador_tipo_ingreso_not_null}")
+//	@Size(max=100,message="{producto.indicador_tipo_ingreso_size}")
+//	@Column(name="p_ind_tipo_ingreso")
+//	private String indicadorTipoIngreso;
+//
+//	public String getIndicadorTipoEvento() {
+//		return indicadorTipoEvento;
+//	}
+//	public void setIndicadorTipoEvento(String indicadorTipoEvento) {
+//		this.indicadorTipoEvento = indicadorTipoEvento;
+//	}
+	
 	/**
 	 * @return the nombreProveedor
 	 */
@@ -239,5 +258,16 @@ public class Producto implements Serializable{
 		this.codigoProveedor = codigoProveedor;
 	}
 
-	
+
+	@Override
+	public String toString() {
+		return "Producto [codigoProducto=" + codigoProducto + ", codigoBarra="
+				+ codigoBarra + ", codigoInventario=" + codigoInventario
+				+ ", fechaProceso=" + fechaProceso + ", indicadorExito="
+				+ indicadorExito + ", indicadorProductoLeido="
+				+ indicadorProductoLeido + ", loteLeido=" + loteLeido
+				+ ", vencimiento=" + vencimiento + ", nombreProducto="
+				+ nombreProducto + ", codigoProveedor=" + codigoProveedor
+				+ ", nombreProveedor=" + nombreProveedor + "]";
+	}
 }
