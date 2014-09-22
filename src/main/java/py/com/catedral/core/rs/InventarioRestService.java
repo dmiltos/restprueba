@@ -55,6 +55,14 @@ public class InventarioRestService {
 		Producto prod = null;
 		Map<String,String> res = new HashMap<String, String>();
 		
+		if (request.getHeader("authorization") == null){
+			res.put("message", "Header Authorization no encontrado");
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity(res)
+					.build();
+		}
+		
 		JSONObject jsonPayLoad = decodePayload(request);
 		String user = (String) jsonPayLoad.get("sub");
 		String pass = (String) jsonPayLoad.get("pss");
@@ -131,14 +139,6 @@ public class InventarioRestService {
 	public Response login(CredencialesCliente params, @Context HttpServletRequest request){		
 
 		Map<String,String> res = new HashMap<String, String>();
-		
-		if (request.getHeader("authorization") == null){
-			res.put("message", "Header Authorization no encontrado");
-			return Response
-					.status(Status.UNAUTHORIZED)
-					.entity(res)
-					.build();
-		}
 		
 		if (inventarioService.login(params.getUsuario(), params.getClave())){
 			Calendar cal = Calendar.getInstance();
