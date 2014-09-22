@@ -91,6 +91,14 @@ public class InventarioRestService {
 		
 		Map<String,String> res = new HashMap<String, String>();
 		
+		if (request.getHeader("authorization") == null){
+			res.put("message", "Header Authorization no encontrado");
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity(res)
+					.build();
+		}
+		
 		JSONObject jsonPayLoad = decodePayload(request);
 		return Response
 				.ok()
