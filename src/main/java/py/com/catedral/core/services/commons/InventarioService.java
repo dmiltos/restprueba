@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +98,7 @@ public class InventarioService {
 			q.setParameter("p_cod_barra", codigoDeBarras); // IN parameter
 			q.setParameter("p_cod_inventario", codigoDeInventario); // IN parameter
 			Date fechaProceso = new Date(System.currentTimeMillis());
-			q.setParameter("p_fec_proceso", fechaProceso); // IN parameter
+			q.setParameter("p_fec_proceso", fechaProceso, TemporalType.TIMESTAMP); // IN parameter
 			q.setParameter("p_ind_manual", indicadorManual); // IN parameter
 			q.setParameter("p_estado", estado); // IN parameter
 			q.setParameter("p_cantidad", cantidad); // IN parameter
@@ -106,8 +107,10 @@ public class InventarioService {
 			Date fechaVencimiento = null;
 			if (vencimiento != null){
 				fechaVencimiento = new Date(vencimiento.getTime());
+				q.setParameter("p_vencimiento", fechaVencimiento); // IN parameter
+			}else{
+				q.setParameter("p_vencimiento", fechaProceso, TemporalType.TIMESTAMP); // IN parameter
 			}
-			q.setParameter("p_vencimiento", fechaVencimiento); // IN parameter
 			
 			Producto prod = null;
 			logger.debug("CODIGO DE BARRAS:" + codigoDeBarras);
