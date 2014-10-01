@@ -86,7 +86,7 @@ public class InventarioService {
 	 * @throws BusinessException
 	 */
 	public Producto inventariar(String codigoDeBarras, Long codigoDeInventario, String indicadorManual, String estado, 
-			Float cantidad, String lote, java.util.Date vencimiento, String indicadorTipoEvento,
+			Float cantidad, String lote, String vencimiento, String indicadorTipoEvento,
 			String usuario, String clave) throws AppException, BusinessException {
 
 		validarArgumento(codigoDeBarras, "El objeto codigo de barras no puede ser nulo");
@@ -104,13 +104,15 @@ public class InventarioService {
 			q.setParameter("p_cantidad", cantidad); // IN parameter
 			q.setParameter("p_lote", lote); // IN parameter
 			q.setParameter("p_ind_tipo_evento", indicadorTipoEvento != null && !"".equals(indicadorTipoEvento.trim()) ? indicadorTipoEvento : "WS"); // IN parameter, envia WS por defecto
-			Date fechaVencimiento = null;
-			if (vencimiento != null){
-				fechaVencimiento = new Date(vencimiento.getTime());
-				q.setParameter("p_vencimiento", fechaVencimiento); // IN parameter
-			}else{
-				q.setParameter("p_vencimiento", fechaProceso, TemporalType.TIMESTAMP); // IN parameter
-			}
+			q.setParameter("p_vencimiento", vencimiento); // IN parameter
+			
+//			Date fechaVencimiento = null;
+//			if (vencimiento != null){
+//				fechaVencimiento = new Date(vencimiento.getTime());
+//				q.setParameter("p_vencimiento", fechaVencimiento, TemporalType.DATE); // IN parameter
+//			}else{
+//				q.setParameter("p_vencimiento", fechaProceso, TemporalType.TIMESTAMP); // IN parameter
+//			}
 			
 			Producto prod = null;
 			logger.debug("CODIGO DE BARRAS:" + codigoDeBarras);

@@ -86,7 +86,7 @@ public class Producto implements Serializable{
 	@NotNull(message="{producto.vencimiento_producto_not_null}")
 	@Size(max=10,message="{producto.vencimiento_producto_size}")
 	@Column(name="p_fec_venc_prod")
-	private Date vencimiento;
+	private String vencimiento;
 	
 	@NotNull(message="{producto.nombre_producto_not_null}")
 	@Size(max=100,message="{producto.nombre_producto_size}")
@@ -219,14 +219,14 @@ public class Producto implements Serializable{
 	/**
 	 * @return the vencimiento
 	 */
-	public Date getVencimiento() {
+	public String getVencimiento() {
 		return vencimiento;
 	}
 
 	/**
 	 * @param vencimiento the vencimiento to set
 	 */
-	public void setVencimiento(Date vencimiento) {
+	public void setVencimiento(String vencimiento) {
 		this.vencimiento = vencimiento;
 	}
 

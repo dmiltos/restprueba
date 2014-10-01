@@ -32,7 +32,7 @@ public class ParametrosInventario extends CredencialesCliente{
 	private String indicadorManual;
 	private Float cantidad;
 	private String lote;
-	private Date vencimiento;
+	private String vencimiento;
 	
 	/**
 	 * @return the codigoBarras
@@ -97,13 +97,13 @@ public class ParametrosInventario extends CredencialesCliente{
 	/**
 	 * @return the vencimiento
 	 */
-	public Date getVencimiento() {
+	public String getVencimiento() {
 		return vencimiento;
 	}
 	/**
 	 * @param vencimiento the vencimiento to set
 	 */
-	public void setVencimiento(Date vencimiento) {
+	public void setVencimiento(String vencimiento) {
 		this.vencimiento = vencimiento;
 	}
 	

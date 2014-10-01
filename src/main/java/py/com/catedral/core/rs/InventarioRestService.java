@@ -80,7 +80,8 @@ public class InventarioRestService {
 			return Response.ok(prod).build();
 		}
 		else{	
-			return Response.status(Status.NO_CONTENT).entity(res).build();
+			res.put("message", "Datos no encontrados");
+			return Response.status(Status.NOT_FOUND).entity(res).build();
 		}
 	}
 	
@@ -134,7 +135,7 @@ public class InventarioRestService {
 			System.out.println("Verified JWS signature!");
 		else
 			System.out.println("Bad JWS signature!");
-		System.out.println("Recovered payload message: " + jwsObject.getPayload());
+		//System.out.println("Recovered payload message: " + jwsObject.getPayload());
 		
 		JSONObject jsonPayLoad = jwsObject.getPayload().toJSONObject();
 		return jsonPayLoad;
