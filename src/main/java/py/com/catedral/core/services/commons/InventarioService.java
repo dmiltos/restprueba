@@ -6,6 +6,7 @@ import java.sql.Date;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
@@ -51,11 +52,16 @@ public class InventarioService {
 	
 	public boolean login(String usuario, String clave){
 		Object sysdate = null;
+		EntityManager em = factory.getEntityManager(usuario, clave);
 		try{
-		Query q = factory.getEntityManager(usuario, clave).createNativeQuery("SELECT SYSDATE FROM DUAL");
-		sysdate = q.getSingleResult();
+			Query q = em.createNativeQuery("SELECT SYSDATE FROM DUAL");
+			sysdate = q.getSingleResult();
+			
 		}catch(PersistenceException e){
 			return false;
+		}
+		finally{
+			this.cerrarSesion(em);
 		}
 		if (sysdate != null){
 			java.sql.Timestamp x = (java.sql.Timestamp)sysdate;
@@ -66,6 +72,12 @@ public class InventarioService {
 			return true;
 		}
 		return false;
+	}
+	
+	private void cerrarSesion(EntityManager em) {
+		if (em != null && em.isOpen()){
+			em.close();
+		}
 	}
 	
 	/**
@@ -90,10 +102,11 @@ public class InventarioService {
 			String usuario, String clave) throws AppException, BusinessException {
 
 		validarArgumento(codigoDeBarras, "El objeto codigo de barras no puede ser nulo");
+		EntityManager em = factory.getEntityManager(usuario, clave);
 
 		try {
 
-			Query q = factory.getEntityManager(usuario, clave).createNamedQuery("Producto.callInventarioStoreProcedure");
+			Query q = em.createNamedQuery("Producto.callInventarioStoreProcedure");
 			
 			q.setParameter("p_cod_barra", codigoDeBarras); // IN parameter
 			q.setParameter("p_cod_inventario", codigoDeInventario); // IN parameter
@@ -138,7 +151,7 @@ public class InventarioService {
 			logger.error("OCURRIO UN ERROR AL INVENTARIAR:" + ae.getMessage());
 			throw new AppException.InternalError(ae.getMessage());
 		} finally {
-			
+			this.cerrarSesion(em);
 		}
 	}
 
