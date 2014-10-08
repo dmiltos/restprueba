@@ -103,6 +103,31 @@ public class Producto implements Serializable{
 	@Column(name="p_prov_nombre")
 	private String nombreProveedor;
 	
+	@NotNull(message="{producto.cantidad_leida_not_null}")
+	@Size(max=20,message="{producto.cantidad_leida_size}")
+	@Column(name="p_cantidad")
+	private String cantidadLeida;
+	
+	@NotNull(message="{producto.cantidad_acum_producto_not_null}")
+	@Size(max=20,message="{producto.cantidad_acum_producto_size}")
+	@Column(name="p_cant_acum")
+	private String cantidadAcumuladaProducto;
+	
+	@NotNull(message="{producto.total_inventario_not_null}")
+	@Size(max=20,message="{producto.total_inventario_size}")
+	@Column(name="p_total_inventario")
+	private String totalInventario;
+	
+	@NotNull(message="{producto.total_cargado_not_null}")
+	@Size(max=20,message="{producto.total_cargado_size}")
+	@Column(name="p_total_cargado")
+	private String totalCargado;
+	
+	@NotNull(message="{producto.total_restante_not_null}")
+	@Size(max=20,message="{producto.total_restante_size}")
+	@Column(name="p_falta")
+	private String totalRestante;
+	
 //	@NotNull(message="{producto.indicador_tipo_evento_not_null}")
 //	@Size(max=100,message="{producto.indicador_tipo_evento_size}")
 //	@Column(name="p_ind_tipo_evento")
@@ -269,5 +294,77 @@ public class Producto implements Serializable{
 				+ ", vencimiento=" + vencimiento + ", nombreProducto="
 				+ nombreProducto + ", codigoProveedor=" + codigoProveedor
 				+ ", nombreProveedor=" + nombreProveedor + "]";
+	}
+	/**
+	 * @return the codigoProducto
+	 */
+	public String getCodigoProducto() {
+		return codigoProducto;
+	}
+	/**
+	 * @param codigoProducto the codigoProducto to set
+	 */
+	public void setCodigoProducto(String codigoProducto) {
+		this.codigoProducto = codigoProducto;
+	}
+	/**
+	 * @return the cantidadLeida
+	 */
+	public String getCantidadLeida() {
+		return cantidadLeida;
+	}
+	/**
+	 * @param cantidadLeida the cantidadLeida to set
+	 */
+	public void setCantidadLeida(String cantidadLeida) {
+		this.cantidadLeida = cantidadLeida;
+	}
+	/**
+	 * @return the cantidadAcumuladaProducto
+	 */
+	public String getCantidadAcumuladaProducto() {
+		return cantidadAcumuladaProducto;
+	}
+	/**
+	 * @param cantidadAcumuladaProducto the cantidadAcumuladaProducto to set
+	 */
+	public void setCantidadAcumuladaProducto(String cantidadAcumuladaProducto) {
+		this.cantidadAcumuladaProducto = cantidadAcumuladaProducto;
+	}
+	/**
+	 * @return the totalInventario
+	 */
+	public String getTotalInventario() {
+		return totalInventario;
+	}
+	/**
+	 * @param totalInventario the totalInventario to set
+	 */
+	public void setTotalInventario(String totalInventario) {
+		this.totalInventario = totalInventario;
+	}
+	/**
+	 * @return the totalCargado
+	 */
+	public String getTotalCargado() {
+		return totalCargado;
+	}
+	/**
+	 * @param totalCargado the totalCargado to set
+	 */
+	public void setTotalCargado(String totalCargado) {
+		this.totalCargado = totalCargado;
+	}
+	/**
+	 * @return the totalRestante
+	 */
+	public String getTotalRestante() {
+		return totalRestante;
+	}
+	/**
+	 * @param totalRestante the totalRestante to set
+	 */
+	public void setTotalRestante(String totalRestante) {
+		this.totalRestante = totalRestante;
 	}
 }
