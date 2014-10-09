@@ -102,31 +102,36 @@ public class Producto implements Serializable{
 	@Size(max=100,message="{producto.nombre_proveedor_size}")
 	@Column(name="p_prov_nombre")
 	private String nombreProveedor;
+
+	@NotNull(message="{producto.cantidad_acum_producto_not_null}")
+	@Size(max=20,message="{producto.cantidad_acum_producto_size}")
+	@Column(name="p_cant_acum")
+	private Integer cantidadAcumuladaProducto;
 	
 	@NotNull(message="{producto.cantidad_leida_not_null}")
 	@Size(max=20,message="{producto.cantidad_leida_size}")
 	@Column(name="p_cantidad")
-	private String cantidadLeida;
-	
-	@NotNull(message="{producto.cantidad_acum_producto_not_null}")
-	@Size(max=20,message="{producto.cantidad_acum_producto_size}")
-	@Column(name="p_cant_acum")
-	private String cantidadAcumuladaProducto;
+	private Integer cantidadLeida;
 	
 	@NotNull(message="{producto.total_inventario_not_null}")
 	@Size(max=20,message="{producto.total_inventario_size}")
 	@Column(name="p_total_inventario")
-	private String totalInventario;
+	private Integer totalInventario;
 	
 	@NotNull(message="{producto.total_cargado_not_null}")
 	@Size(max=20,message="{producto.total_cargado_size}")
 	@Column(name="p_total_cargado")
-	private String totalCargado;
+	private Integer totalCargado;
 	
 	@NotNull(message="{producto.total_restante_not_null}")
 	@Size(max=20,message="{producto.total_restante_size}")
 	@Column(name="p_falta")
-	private String totalRestante;
+	private Integer totalRestante;
+	
+	@NotNull(message="{producto.existencia_not_null}")
+	@Size(max=20,message="{producto.existencia_size}")
+	@Column(name="p_existencia")
+	private Integer existencia;
 	
 //	@NotNull(message="{producto.indicador_tipo_evento_not_null}")
 //	@Size(max=100,message="{producto.indicador_tipo_evento_size}")
@@ -307,64 +312,78 @@ public class Producto implements Serializable{
 	public void setCodigoProducto(String codigoProducto) {
 		this.codigoProducto = codigoProducto;
 	}
+	
 	/**
 	 * @return the cantidadLeida
 	 */
-	public String getCantidadLeida() {
+	public Integer getCantidadLeida() {
 		return cantidadLeida;
 	}
 	/**
 	 * @param cantidadLeida the cantidadLeida to set
 	 */
-	public void setCantidadLeida(String cantidadLeida) {
+	public void setCantidadLeida(Integer cantidadLeida) {
 		this.cantidadLeida = cantidadLeida;
 	}
 	/**
 	 * @return the cantidadAcumuladaProducto
 	 */
-	public String getCantidadAcumuladaProducto() {
+	public Integer getCantidadAcumuladaProducto() {
 		return cantidadAcumuladaProducto;
 	}
 	/**
 	 * @param cantidadAcumuladaProducto the cantidadAcumuladaProducto to set
 	 */
-	public void setCantidadAcumuladaProducto(String cantidadAcumuladaProducto) {
+	public void setCantidadAcumuladaProducto(Integer cantidadAcumuladaProducto) {
 		this.cantidadAcumuladaProducto = cantidadAcumuladaProducto;
 	}
 	/**
 	 * @return the totalInventario
 	 */
-	public String getTotalInventario() {
+	public Integer getTotalInventario() {
 		return totalInventario;
 	}
 	/**
 	 * @param totalInventario the totalInventario to set
 	 */
-	public void setTotalInventario(String totalInventario) {
+	public void setTotalInventario(Integer totalInventario) {
 		this.totalInventario = totalInventario;
 	}
 	/**
 	 * @return the totalCargado
 	 */
-	public String getTotalCargado() {
+	public Integer getTotalCargado() {
 		return totalCargado;
 	}
 	/**
 	 * @param totalCargado the totalCargado to set
 	 */
-	public void setTotalCargado(String totalCargado) {
+	public void setTotalCargado(Integer totalCargado) {
 		this.totalCargado = totalCargado;
 	}
 	/**
 	 * @return the totalRestante
 	 */
-	public String getTotalRestante() {
+	public Integer getTotalRestante() {
 		return totalRestante;
 	}
 	/**
 	 * @param totalRestante the totalRestante to set
 	 */
-	public void setTotalRestante(String totalRestante) {
+	public void setTotalRestante(Integer totalRestante) {
 		this.totalRestante = totalRestante;
+	}
+	
+	/**
+	 * @return the existencia
+	 */
+	public Integer getExistencia() {
+		return existencia;
+	}
+	/**
+	 * @param existencia the existencia to set
+	 */
+	public void setExistencia(Integer existencia) {
+		this.existencia = existencia;
 	}
 }

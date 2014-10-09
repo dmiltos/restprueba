@@ -13,20 +13,21 @@ import py.com.catedral.core.config.Configuration;
 import py.com.catedral.core.config.ConfigurationFactory;
 /**
  * 
- * Clase wrraper para conexiones via MyBatis
+ * Clase wrraper para conexiones via JPA
  *
  */
 @Singleton
 public class CoreSessionFactoryWrapper {//extends SessionFactoryWrapper {
-	
+
 	protected final Configuration config = ConfigurationFactory.getConfig();
-	
-	private EntityManager em;
+
+	private EntityManagerFactory factory;
 
 	public CoreSessionFactoryWrapper() throws IOException {
 	}
 
-	public EntityManager getEntityManager(String usuario, String clave){
+	private EntityManagerFactory getEntityManagerFactory(String usuario, String clave){
+		if (factory == null){
 			Map<String, Object> properties = new HashMap<>();
 			properties.put("javax.persistence.jdbc.url", config.getJdbcURL());
 			properties.put("javax.persistence.jdbc.driver", config.getJdbcDriver());
@@ -36,10 +37,19 @@ public class CoreSessionFactoryWrapper {//extends SessionFactoryWrapper {
 			properties.put("javax.persistence.jdbc.password", clave);
 
 			properties.put("connection.pool_size", config.getConnectionPoolSize());
-			EntityManagerFactory emf =
+			factory =
 					Persistence.createEntityManagerFactory("Core-JpaPersistenceUnit", properties);
-			em = emf.createEntityManager();
-		return em;
+		}
+		return factory;
+	}
+
+	public EntityManager getEntityManager(String usuario, String clave){
+		
+		Map<String, String> properties = new HashMap<String, String>();
+		properties.put("javax.persistence.jdbc.user", usuario);
+		properties.put("javax.persistence.jdbc.password", clave);
+
+		return this.getEntityManagerFactory(usuario, clave).createEntityManager(properties);
 	}
 
 }
