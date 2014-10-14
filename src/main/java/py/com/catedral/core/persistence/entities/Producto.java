@@ -37,7 +37,7 @@ import javax.validation.constraints.Size;
 	@NamedNativeQuery(
 	name = "Producto.callInventarioStoreProcedure",
 //	query = "begin GET_SINGLE_PRODUCT_INFO(?, ?, ?, ?, ?); end;")
-	query = "{call PA_INVENTARIO(?, :p_cod_barra, :p_cod_inventario, :p_fec_proceso, :p_ind_manual, :p_estado, :p_cantidad, :p_lote, :p_vencimiento, :p_ind_tipo_evento)}", 
+	query = "{call PA_INVENTARIO(?, :p_cod_barra, :p_cod_inventario, :p_fec_proceso, :p_ind_manual, :p_estado, :p_cantidad, :p_lote, :p_vencimiento, :p_ind_tipo_evento, :p_cod_barra_manual)}", 
 		resultClass = Producto.class, hints = {
 			@javax.persistence.QueryHint(name = "org.hibernate.callable", value = "true") 
 		})

@@ -70,7 +70,7 @@ public class InventarioRestService {
 		try {
 			prod = inventarioService.inventariar(params.getCodigoBarras(), 
 					params.getCodigoInventario(), params.getIndicadorManual(), "ENPRO", 
-					params.getCantidad(), params.getLote(), params.getVencimiento(), "WS", user, pass);
+					params.getCantidad(), params.getLote(), params.getVencimiento(), "WS", params.getCodigoDeBarrasManual(), user, pass);
 			
 		} catch (AppException | BusinessException e) {			
 			e.printStackTrace();

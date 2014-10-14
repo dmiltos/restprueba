@@ -16,8 +16,6 @@
  
 package py.com.catedral.core.rs;
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
  
 /**
@@ -33,6 +31,7 @@ public class ParametrosInventario extends CredencialesCliente{
 	private Float cantidad;
 	private String lote;
 	private String vencimiento;
+	private Long codigoDeBarrasManual;
 	
 	/**
 	 * @return the codigoBarras
@@ -105,6 +104,16 @@ public class ParametrosInventario extends CredencialesCliente{
 	 */
 	public void setVencimiento(String vencimiento) {
 		this.vencimiento = vencimiento;
+	}
+	public Long getCodigoDeBarrasManual() {
+		// TODO Auto-generated method stub
+		return this.codigoDeBarrasManual;
+	}
+	/**
+	 * @param codigoDeBarrasManual the codigoDeBarrasManual to set
+	 */
+	public void setCodigoDeBarrasManual(Long codigoDeBarrasManual) {
+		this.codigoDeBarrasManual = codigoDeBarrasManual;
 	}
 	
 
