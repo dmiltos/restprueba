@@ -14,6 +14,8 @@ import javax.persistence.TemporalType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 import py.com.catedral.core.exceptions.AppException;
 import py.com.catedral.core.exceptions.BusinessException;
 import py.com.catedral.core.persistence.entities.Producto;
@@ -100,15 +102,17 @@ public class InventarioService {
 	public Producto inventariar(String codigoDeBarras, Long codigoDeInventario, String indicadorManual, String estado, 
 			Float cantidad, String lote, String vencimiento, String indicadorTipoEvento, Long codigoDeBarrasManual,
 			String usuario, String clave) throws AppException, BusinessException {
-
-		validarArgumento(codigoDeBarras, "El objeto codigo de barras no puede ser nulo");
+		
+		if (Strings.isNullOrEmpty(codigoDeBarras) && codigoDeBarrasManual == null){
+			validarArgumento(codigoDeBarras, "El objeto codigo de barras no puede ser nulo");
+		}
 		EntityManager em = factory.getEntityManager(usuario, clave);
 
 		try {
 
 			Query q = em.createNamedQuery("Producto.callInventarioStoreProcedure");
 			
-			q.setParameter("p_cod_barra", codigoDeBarras); // IN parameter
+			q.setParameter("p_cod_barra", codigoDeBarras != null && !"".equals(codigoDeBarras) ? codigoDeBarras : String.valueOf(codigoDeBarrasManual)); // IN parameter
 			q.setParameter("p_cod_inventario", codigoDeInventario); // IN parameter
 			Date fechaProceso = new Date(System.currentTimeMillis());
 			q.setParameter("p_fec_proceso", fechaProceso, TemporalType.TIMESTAMP); // IN parameter
@@ -117,8 +121,8 @@ public class InventarioService {
 			q.setParameter("p_cantidad", cantidad); // IN parameter
 			q.setParameter("p_lote", lote); // IN parameter
 			q.setParameter("p_ind_tipo_evento", indicadorTipoEvento != null && !"".equals(indicadorTipoEvento.trim()) ? indicadorTipoEvento : "WS"); // IN parameter, envia WS por defecto
-			q.setParameter("p_vencimiento", vencimiento); // IN parameter
-			q.setParameter("p_cod_barra_manual", codigoDeBarrasManual);
+			q.setParameter("p_vencimiento", vencimiento == null ? "" : vencimiento); // IN parameter
+//			q.setParameter("p_cod_barra_manual", codigoDeBarrasManual == null ? 0 : codigoDeBarrasManual);
 			
 //			Date fechaVencimiento = null;
 //			if (vencimiento != null){
@@ -129,18 +133,19 @@ public class InventarioService {
 //			}
 			
 			Producto prod = null;
-			logger.debug("CODIGO DE BARRAS:" + codigoDeBarras);
-			logger.debug("CODIGO DE INVENTARIO:" + codigoDeInventario);
-			logger.debug("FECHA DE PROCESO:" + fechaProceso);
-			logger.debug("CARGA MANUAL?:" + indicadorManual);
-			logger.debug("ESTADO:" + estado);
-			logger.debug("CANTIDAD:" + cantidad);
-			logger.debug("LOTE:" + lote);
-			logger.debug("VENCIMIENTO:" + vencimiento);
+			logger.info("CODIGO DE BARRAS: " + codigoDeBarras);
+			logger.info("CODIGO DE INVENTARIO: " + codigoDeInventario);
+			logger.info("FECHA DE PROCESO: " + fechaProceso);
+			logger.info("CARGA MANUAL?: " + indicadorManual);
+			logger.info("ESTADO: " + estado);
+			logger.info("CANTIDAD: " + cantidad);
+			logger.info("LOTE: " + lote);
+			logger.info("VENCIMIENTO: " + vencimiento);
+			logger.info("COD BARRAS MANUAL:" + codigoDeBarrasManual);
 
 			try {
 			  prod = (Producto)q.getSingleResult();
-			  logger.debug("SE INVENTARIO UN PRODUCTO CON LOS SIGUIENTES DATOS:" + prod);
+			  logger.info("SE INVENTARIO UN PRODUCTO CON LOS SIGUIENTES DATOS:" + prod);
 				
 			} catch (Exception ae) {
 				logger.error("NO SE PUDIERON LEER DATOS DEL PROCEDIMIENTO");
