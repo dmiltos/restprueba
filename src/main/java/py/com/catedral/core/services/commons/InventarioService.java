@@ -112,7 +112,7 @@ public class InventarioService {
 
 			Query q = em.createNamedQuery("Producto.callInventarioStoreProcedure");
 			
-			q.setParameter("p_cod_barra", codigoDeBarras != null && !"".equals(codigoDeBarras) ? codigoDeBarras : String.valueOf(codigoDeBarrasManual)); // IN parameter
+			q.setParameter("p_cod_barra", codigoDeBarras != null && !"".equals(codigoDeBarras) ? codigoDeBarras : codigoDeBarrasManual != null ? codigoDeBarrasManual.toString() : ""); // IN parameter
 			q.setParameter("p_cod_inventario", codigoDeInventario); // IN parameter
 			Date fechaProceso = new Date(System.currentTimeMillis());
 			q.setParameter("p_fec_proceso", fechaProceso, TemporalType.TIMESTAMP); // IN parameter
@@ -144,8 +144,10 @@ public class InventarioService {
 			logger.info("COD BARRAS MANUAL:" + codigoDeBarrasManual);
 
 			try {
-			  prod = (Producto)q.getSingleResult();
-			  logger.info("SE INVENTARIO UN PRODUCTO CON LOS SIGUIENTES DATOS:" + prod);
+			  Object o = q.getSingleResult();
+			  logger.info("OBJETO RESULTANTE: " + o);
+			  prod = (Producto)o;
+			  logger.info("SE INVENTARIO UN PRODUCTO CON LOS SIGUIENTES DATOS: " + prod);
 				
 			} catch (Exception ae) {
 				logger.error("NO SE PUDIERON LEER DATOS DEL PROCEDIMIENTO");
