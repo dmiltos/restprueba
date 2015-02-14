@@ -1,6 +1,5 @@
 package py.com.catedral.core.rs;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,20 +30,17 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
 
 @Path("/inventario")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class InventarioRestService {
+public class InventarioRestService extends AbstractRestService{
 	
 	@Inject
 	private InventarioService inventarioService;	
-	private String sharedKey = "a0a2abd8616241c383d61cf559b46afc";
 	
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
@@ -55,13 +51,8 @@ public class InventarioRestService {
 		Producto prod = null;
 		Map<String,String> res = new HashMap<String, String>();
 		
-		if (request.getHeader("authorization") == null){
-			res.put("message", "Header Authorization no encontrado");
-			return Response
-					.status(Status.UNAUTHORIZED)
-					.entity(res)
-					.build();
-		}
+		Response resp = validarAuthHeader(request, res);
+		if (resp != null) return resp;
 		
 		JSONObject jsonPayLoad = decodePayload(request);
 		String user = (String) jsonPayLoad.get("sub");
@@ -92,53 +83,14 @@ public class InventarioRestService {
 		
 		Map<String,String> res = new HashMap<String, String>();
 		
-		if (request.getHeader("authorization") == null){
-			res.put("message", "Header Authorization no encontrado");
-			return Response
-					.status(Status.UNAUTHORIZED)
-					.entity(res)
-					.build();
-		}
+		Response resp = validarAuthHeader(request, res);
+		if (resp != null) return resp;
 		
 		JSONObject jsonPayLoad = decodePayload(request);
 		return Response
 				.ok()
 				.entity(jsonPayLoad)
 				.build();
-	}
-
-	private JSONObject decodePayload(HttpServletRequest request) {
-				
-		String token = request.getHeader("authorization");
-		token = token.startsWith("Bearer ") ? token.substring(7) : token;
-		
-		// Parse back and check signature
-		JWSObject jwsObject = null;
-		try {
-			jwsObject = JWSObject.parse(token);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		JWSVerifier verifier = new MACVerifier(sharedKey.getBytes());
-
-		boolean verifiedSignature = false;
-		try {
-			verifiedSignature = jwsObject.verify(verifier);
-		} catch (JOSEException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		if (verifiedSignature)
-			System.out.println("Verified JWS signature!");
-		else
-			System.out.println("Bad JWS signature!");
-		//System.out.println("Recovered payload message: " + jwsObject.getPayload());
-		
-		JSONObject jsonPayLoad = jwsObject.getPayload().toJSONObject();
-		return jsonPayLoad;
 	}
 	
 	@POST

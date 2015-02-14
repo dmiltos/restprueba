@@ -4,22 +4,17 @@ import static py.com.catedral.core.services.utils.ValidationUtil.validarArgument
 
 import java.sql.Date;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
-
 import py.com.catedral.core.exceptions.AppException;
 import py.com.catedral.core.exceptions.BusinessException;
 import py.com.catedral.core.persistence.entities.Producto;
-import py.com.catedral.core.services.jpa.CoreSessionFactoryWrapper;
+
+import com.google.common.base.Strings;
 
 /**
  * Esta clase provee m&eacute;todos para operaciones de toma de inventario de productos
@@ -29,12 +24,8 @@ import py.com.catedral.core.services.jpa.CoreSessionFactoryWrapper;
  */
 
 @Stateless(name = "InventarioService", description = "Servicios para la toma de inventarios")
-public class InventarioService {
-	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
+public class InventarioService extends AbstractService{
 
-	@EJB
-	private CoreSessionFactoryWrapper factory;
 
 	/**
 	 * Este m&eacute;todo env&iacute;a el coacute;digo del producto leiacute;do al procedimiento almacenado
@@ -75,12 +66,7 @@ public class InventarioService {
 		}
 		return false;
 	}
-	
-	private void cerrarSesion(EntityManager em) {
-		if (em != null && em.isOpen()){
-			em.close();
-		}
-	}
+
 	
 	/**
 	 * Procedimiento para inventariar productos
