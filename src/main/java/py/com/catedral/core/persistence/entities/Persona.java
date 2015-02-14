@@ -1,5 +1,10 @@
 package py.com.catedral.core.persistence.entities;
 
+/**
+ * Clase que representa una Persona generica en el dominio
+ * @author pablo
+ *
+ */
 public class Persona {
 	
 	private Long codigo;

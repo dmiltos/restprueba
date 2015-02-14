@@ -6,15 +6,22 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
+
 import py.com.catedral.core.exceptions.AppException;
 import py.com.catedral.core.exceptions.BusinessException;
 import py.com.catedral.core.persistence.entities.Empleado;
+import py.com.catedral.core.persistence.entities.OrdenDeCompraAsignada;
+import py.com.catedral.core.persistence.entities.OrdenDeCompraPendiente;
+import py.com.catedral.core.persistence.entities.PedidoDeReposicionAsignado;
+import py.com.catedral.core.persistence.entities.PedidoDeReposicionPendiente;
 import py.com.catedral.core.persistence.entities.Proveedor;
 import py.com.catedral.core.services.jpa.CoreSessionFactoryWrapper;
 
 @Stateless(name = "PickingService", description = "Servicios para la elaboración de picking")
 public class PickingService {
-	
+
 
 
 	@EJB
@@ -53,7 +60,7 @@ public class PickingService {
 		proveedores.add(e);
 		return proveedores;
 	}
-	
+
 	public List<Proveedor> getProveedoresByIdRepo(String user, String pass, Long id) throws AppException, BusinessException {
 		List<Proveedor> proveedores = new ArrayList<Proveedor>();
 		Proveedor e = new Proveedor();
@@ -64,8 +71,125 @@ public class PickingService {
 		e.setCodigo(222L);
 		e.setNombre("SCAVONE HNOS.");
 		proveedores.add(e);
-		
+
 		return proveedores;
 	}
 
+	public List<OrdenDeCompraPendiente> getOrdenesDeCompraPendientes(String user,
+			String pass) throws AppException, BusinessException {
+		List<OrdenDeCompraPendiente> ordenesDeCompra = new ArrayList<OrdenDeCompraPendiente>();
+		OrdenDeCompraPendiente o = new OrdenDeCompraPendiente();
+		try {
+			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
+			o.setNumeroOrden(3996671L);
+			o.setSucursal("VILLA MORRA");
+			ordenesDeCompra.add(o);
+			o = new OrdenDeCompraPendiente();
+			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			o.setNumeroOrden(3996672L);
+			o.setSucursal("CENTRO");
+			ordenesDeCompra.add(o);
+			o = new OrdenDeCompraPendiente();
+			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			o.setNumeroOrden(3996673L);
+			o.setSucursal("CENTRO");
+			ordenesDeCompra.add(o);
+		} catch (DateParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ordenesDeCompra;
+	}
+
+	public List<PedidoDeReposicionPendiente> getPedidosDeReposicionPendientes(String user,
+			String pass) throws AppException, BusinessException {
+		List<PedidoDeReposicionPendiente> pedidosDeRepo = new ArrayList<PedidoDeReposicionPendiente>();
+		PedidoDeReposicionPendiente pr = new PedidoDeReposicionPendiente();
+		try {
+			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
+			pr.setNumeroPedido(4545654L);
+			pr.setSucursal("VILLA MORRA");
+			pedidosDeRepo.add(pr);
+			pr = new PedidoDeReposicionPendiente();
+			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			pr.setNumeroPedido(4545655L);
+			pr.setSucursal("CENTRO");
+			pedidosDeRepo.add(pr);
+			pr = new PedidoDeReposicionPendiente();
+			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			pr.setNumeroPedido(4545656L);
+			pr.setSucursal("SAN LORENZO");
+			pedidosDeRepo.add(pr);
+		} catch (DateParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pedidosDeRepo;
+	}
+
+	public List<OrdenDeCompraAsignada> getOrdenesDeCompraAsignadasPorEmpleado(
+			String user, String pass) throws AppException, BusinessException {
+		List<OrdenDeCompraAsignada> ordenesDeCompra = new ArrayList<OrdenDeCompraAsignada>();
+		OrdenDeCompraAsignada o = new OrdenDeCompraAsignada();
+		try {
+			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
+			o.setNumeroOrden(3996671L);
+			o.setSucursal("VILLA MORRA");
+			o.setPasillo("PASILLO 1");
+			ordenesDeCompra.add(o);
+			o = new OrdenDeCompraAsignada();
+			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			o.setNumeroOrden(3996672L);
+			o.setSucursal("CENTRO");
+			o.setPasillo("PASILLO 1");
+			ordenesDeCompra.add(o);
+			o = new OrdenDeCompraAsignada();
+			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			o.setNumeroOrden(3996673L);
+			o.setSucursal("CENTRO");
+			o.setPasillo("PASILLO 2");
+			ordenesDeCompra.add(o);
+		} catch (DateParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ordenesDeCompra;
+	}
+
+	public List<PedidoDeReposicionAsignado> getPedidosDeReposicionAsignadosPorEmpleado(
+			String user, String pass) throws AppException, BusinessException {
+		List<PedidoDeReposicionAsignado> pedidosDeReposicion = new ArrayList<PedidoDeReposicionAsignado>();
+		PedidoDeReposicionAsignado pr = new PedidoDeReposicionAsignado();
+		try {
+			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
+			pr.setNumeroPedido(4545654L);
+			pr.setSucursal("VILLA MORRA");
+			pr.setPasillo("PASILLO 1");
+			pedidosDeReposicion.add(pr);
+			pr = new PedidoDeReposicionAsignado();
+			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			pr.setNumeroPedido(4545655L);
+			pr.setSucursal("CENTRO");
+			pr.setPasillo("PASILLO 2");
+			pedidosDeReposicion.add(pr);
+			pr = new PedidoDeReposicionAsignado();
+			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
+			pr.setNumeroPedido(4545656L);
+			pr.setSucursal("SAN LORENZO");
+			pr.setPasillo("PASILLO 3");
+			pedidosDeReposicion.add(pr);
+		} catch (DateParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pedidosDeReposicion;
+	}
+
+	public List<String> getPasillosDeposito(String user, String pass) throws AppException, BusinessException {
+		List<String> pasillos = new ArrayList<String>();
+		pasillos.add("PASILLO 1");
+		pasillos.add("PASILLO 2");
+		pasillos.add("PASILLO 3");
+		return pasillos;
+	}
 }

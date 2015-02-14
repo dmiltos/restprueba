@@ -21,6 +21,10 @@ import net.minidev.json.JSONObject;
 import py.com.catedral.core.exceptions.AppException;
 import py.com.catedral.core.exceptions.BusinessException;
 import py.com.catedral.core.persistence.entities.Empleado;
+import py.com.catedral.core.persistence.entities.OrdenDeCompraAsignada;
+import py.com.catedral.core.persistence.entities.OrdenDeCompraPendiente;
+import py.com.catedral.core.persistence.entities.PedidoDeReposicionAsignado;
+import py.com.catedral.core.persistence.entities.PedidoDeReposicionPendiente;
 import py.com.catedral.core.persistence.entities.Proveedor;
 import py.com.catedral.core.services.commons.PickingService;
 
@@ -32,6 +36,128 @@ public class PickingRestService extends AbstractRestService{
 
 	@Inject
 	private PickingService pickingService;
+	
+	@GET
+	@Path("ordenes-de-compra/pendientes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOrdenesDeCompraPendientes(@Context HttpServletRequest request){
+		Map<String,String> res = new HashMap<String, String>();
+		
+		Response resp = validarAuthHeader(request, res);
+		if (resp != null) return resp;
+		
+		JSONObject jsonPayLoad = decodePayload(request);
+		String user = (String) jsonPayLoad.get("sub");
+		String pass = (String) jsonPayLoad.get("pss");
+		
+		List<OrdenDeCompraPendiente> ordenesDeCompra = null;
+		try {
+			ordenesDeCompra = pickingService.getOrdenesDeCompraPendientes(user, pass);
+			
+		} catch (AppException | BusinessException e) {			
+			e.printStackTrace();
+		}
+		
+		if (ordenesDeCompra != null){
+			return Response.ok(ordenesDeCompra).build();
+		}
+		else{	
+			res.put("message", "Datos no encontrados");
+			return Response.status(Status.NOT_FOUND).entity(res).build();
+		}
+	}
+	
+	@GET
+	@Path("ordenes-de-compra/asignadas")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOrdenesDeCompraAsignadasPorEmpleado(
+			@Context HttpServletRequest request){
+		
+		Map<String,String> res = new HashMap<String, String>();
+		
+		Response resp = validarAuthHeader(request, res);
+		if (resp != null) return resp;
+		
+		JSONObject jsonPayLoad = decodePayload(request);
+		String user = (String) jsonPayLoad.get("sub");
+		String pass = (String) jsonPayLoad.get("pss");
+		
+		List<OrdenDeCompraAsignada> ordenesDeCompra = null;
+		try {
+			ordenesDeCompra = pickingService.getOrdenesDeCompraAsignadasPorEmpleado(user, pass);
+			
+		} catch (AppException | BusinessException e) {			
+			e.printStackTrace();
+		}
+		
+		if (ordenesDeCompra != null){
+			return Response.ok(ordenesDeCompra).build();
+		}
+		else{	
+			res.put("message", "Datos no encontrados");
+			return Response.status(Status.NOT_FOUND).entity(res).build();
+		}
+	}
+	
+	@GET
+	@Path("pedidos-de-reposicion/pendientes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPedidosDeReposicionPendientes(@Context HttpServletRequest request){
+		Map<String,String> res = new HashMap<String, String>();
+		
+		Response resp = validarAuthHeader(request, res);
+		if (resp != null) return resp;
+		
+		JSONObject jsonPayLoad = decodePayload(request);
+		String user = (String) jsonPayLoad.get("sub");
+		String pass = (String) jsonPayLoad.get("pss");
+		
+		List<PedidoDeReposicionPendiente> pedidosDeRepo = null;
+		try {
+			pedidosDeRepo = pickingService.getPedidosDeReposicionPendientes(user, pass);
+			
+		} catch (AppException | BusinessException e) {			
+			e.printStackTrace();
+		}
+		
+		if (pedidosDeRepo != null){
+			return Response.ok(pedidosDeRepo).build();
+		}
+		else{	
+			res.put("message", "Datos no encontrados");
+			return Response.status(Status.NOT_FOUND).entity(res).build();
+		}
+	}
+	
+	@GET
+	@Path("pedidos-de-reposicion/asignados")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPedidosDeReposicionAsignados(@Context HttpServletRequest request){
+		Map<String,String> res = new HashMap<String, String>();
+		
+		Response resp = validarAuthHeader(request, res);
+		if (resp != null) return resp;
+		
+		JSONObject jsonPayLoad = decodePayload(request);
+		String user = (String) jsonPayLoad.get("sub");
+		String pass = (String) jsonPayLoad.get("pss");
+		
+		List<PedidoDeReposicionAsignado> pedidosDeReposicion = null;
+		try {
+			pedidosDeReposicion = pickingService.getPedidosDeReposicionAsignadosPorEmpleado(user, pass);
+			
+		} catch (AppException | BusinessException e) {			
+			e.printStackTrace();
+		}
+		
+		if (pedidosDeReposicion != null){
+			return Response.ok(pedidosDeReposicion).build();
+		}
+		else{	
+			res.put("message", "Datos no encontrados");
+			return Response.status(Status.NOT_FOUND).entity(res).build();
+		}
+	}
 	
 	@GET
 	@Path("empleados/deposito")
@@ -116,6 +242,36 @@ public class PickingRestService extends AbstractRestService{
 		
 		if (proveedores != null){
 			return Response.ok(proveedores).build();
+		}
+		else{	
+			res.put("message", "Datos no encontrados");
+			return Response.status(Status.NOT_FOUND).entity(res).build();
+		}
+	}
+	
+	@GET
+	@Path("pasillos/deposito")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPasillosDeposito(@Context HttpServletRequest request){
+		Map<String,String> res = new HashMap<String, String>();
+		
+		Response resp = validarAuthHeader(request, res);
+		if (resp != null) return resp;
+		
+		JSONObject jsonPayLoad = decodePayload(request);
+		String user = (String) jsonPayLoad.get("sub");
+		String pass = (String) jsonPayLoad.get("pss");
+		
+		List<String> pasillos = null;
+		try {
+			pasillos = pickingService.getPasillosDeposito(user, pass);
+			
+		} catch (AppException | BusinessException e) {			
+			e.printStackTrace();
+		}
+		
+		if (pasillos != null){
+			return Response.ok(pasillos).build();
 		}
 		else{	
 			res.put("message", "Datos no encontrados");
