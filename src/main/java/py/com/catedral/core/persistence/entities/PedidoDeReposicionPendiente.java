@@ -23,8 +23,8 @@ import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 
 /**
- * Esta clase representa la entidad Pedido de Reposición Pendiente.
- * Es utilizada para mostrar los datos de un pedido de reposición pendiente
+ * Esta clase representa la entidad Pedido de Reposicion Pendiente.
+ * Es utilizada para mostrar los datos de un pedido de reposicion pendiente
  * en el proceso de picking
  * @author Pablo
  *

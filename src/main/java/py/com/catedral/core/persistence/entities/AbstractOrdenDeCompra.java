@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 /**
- * Clase común entre las entidades de tipo Orden de Compra
+ * Clase comon entre las entidades de tipo Orden de Compra
  * pero no es mapeada como una entidad
  * @author pablo
  *

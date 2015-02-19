@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 /**
- * Clase común entre las entidades de tipo Pedido de Reposición
+ * Clase comon entre las entidades de tipo Pedido de Reposicion
  * pero no es mapeada como una entidad
  * @author pablo
  *

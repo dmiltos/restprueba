@@ -19,7 +19,7 @@ import py.com.catedral.core.persistence.entities.PedidoDeReposicionPendiente;
 import py.com.catedral.core.persistence.entities.Proveedor;
 import py.com.catedral.core.services.jpa.CoreSessionFactoryWrapper;
 
-@Stateless(name = "PickingService", description = "Servicios para la elaboración de picking")
+@Stateless(name = "PickingService", description = "Servicios para la elaboracion de picking")
 public class PickingService {
 
 
@@ -79,25 +79,25 @@ public class PickingService {
 			String pass) throws AppException, BusinessException {
 		List<OrdenDeCompraPendiente> ordenesDeCompra = new ArrayList<OrdenDeCompraPendiente>();
 		OrdenDeCompraPendiente o = new OrdenDeCompraPendiente();
-		try {
-			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
-			o.setNumeroOrden(3996671L);
-			o.setSucursal("VILLA MORRA");
-			ordenesDeCompra.add(o);
-			o = new OrdenDeCompraPendiente();
-			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			o.setNumeroOrden(3996672L);
-			o.setSucursal("CENTRO");
-			ordenesDeCompra.add(o);
-			o = new OrdenDeCompraPendiente();
-			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			o.setNumeroOrden(3996673L);
-			o.setSucursal("CENTRO");
-			ordenesDeCompra.add(o);
-		} catch (DateParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		o.setFechaOrden(new java.sql.Date(115,0,10));
+		o.setNumeroOrden(3996671L);
+		o.setSucursal("VILLA MORRA");
+		ordenesDeCompra.add(o);
+		o = new OrdenDeCompraPendiente();
+		o.setFechaOrden(new java.sql.Date(115,0,19));
+		o.setNumeroOrden(3996672L);
+		o.setSucursal("CENTRO");
+		ordenesDeCompra.add(o);
+		o = new OrdenDeCompraPendiente();
+		o.setFechaOrden(new java.sql.Date(115,0,19));
+		o.setNumeroOrden(3996673L);
+		o.setSucursal("CENTRO");
+		ordenesDeCompra.add(o);
+		o = new OrdenDeCompraPendiente();
+		o.setFechaOrden(new java.sql.Date(117,1,19));
+		o.setNumeroOrden(3996673L);
+		o.setSucursal("HIPODROMO");
+		ordenesDeCompra.add(o);
 		return ordenesDeCompra;
 	}
 
@@ -105,25 +105,20 @@ public class PickingService {
 			String pass) throws AppException, BusinessException {
 		List<PedidoDeReposicionPendiente> pedidosDeRepo = new ArrayList<PedidoDeReposicionPendiente>();
 		PedidoDeReposicionPendiente pr = new PedidoDeReposicionPendiente();
-		try {
-			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
-			pr.setNumeroPedido(4545654L);
-			pr.setSucursal("VILLA MORRA");
-			pedidosDeRepo.add(pr);
-			pr = new PedidoDeReposicionPendiente();
-			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			pr.setNumeroPedido(4545655L);
-			pr.setSucursal("CENTRO");
-			pedidosDeRepo.add(pr);
-			pr = new PedidoDeReposicionPendiente();
-			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			pr.setNumeroPedido(4545656L);
-			pr.setSucursal("SAN LORENZO");
-			pedidosDeRepo.add(pr);
-		} catch (DateParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		pr.setFechaPedido(new java.sql.Date(115,0,10));
+		pr.setNumeroPedido(4545654L);
+		pr.setSucursal("VILLA MORRA");
+		pedidosDeRepo.add(pr);
+		pr = new PedidoDeReposicionPendiente();
+		pr.setFechaPedido(new java.sql.Date(115,0,19));
+		pr.setNumeroPedido(4545655L);
+		pr.setSucursal("CENTRO");
+		pedidosDeRepo.add(pr);
+		pr = new PedidoDeReposicionPendiente();
+		pr.setFechaPedido(new java.sql.Date(115,0,19));
+		pr.setNumeroPedido(4545656L);
+		pr.setSucursal("SAN LORENZO");
+		pedidosDeRepo.add(pr);
 		return pedidosDeRepo;
 	}
 
@@ -131,28 +126,23 @@ public class PickingService {
 			String user, String pass) throws AppException, BusinessException {
 		List<OrdenDeCompraAsignada> ordenesDeCompra = new ArrayList<OrdenDeCompraAsignada>();
 		OrdenDeCompraAsignada o = new OrdenDeCompraAsignada();
-		try {
-			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
-			o.setNumeroOrden(3996671L);
-			o.setSucursal("VILLA MORRA");
-			o.setPasillo("PASILLO 1");
-			ordenesDeCompra.add(o);
-			o = new OrdenDeCompraAsignada();
-			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			o.setNumeroOrden(3996672L);
-			o.setSucursal("CENTRO");
-			o.setPasillo("PASILLO 1");
-			ordenesDeCompra.add(o);
-			o = new OrdenDeCompraAsignada();
-			o.setFechaOrden(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			o.setNumeroOrden(3996673L);
-			o.setSucursal("CENTRO");
-			o.setPasillo("PASILLO 2");
-			ordenesDeCompra.add(o);
-		} catch (DateParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		o.setFechaOrden(new java.sql.Date(115,0,10));
+		o.setNumeroOrden(3996671L);
+		o.setSucursal("VILLA MORRA");
+		o.setPasillo("PASILLO 1");
+		ordenesDeCompra.add(o);
+		o = new OrdenDeCompraAsignada();
+		o.setFechaOrden(new java.sql.Date(115,0,19));
+		o.setNumeroOrden(3996672L);
+		o.setSucursal("CENTRO");
+		o.setPasillo("PASILLO 1");
+		ordenesDeCompra.add(o);
+		o = new OrdenDeCompraAsignada();
+		o.setFechaOrden(new java.sql.Date(115,0,19));
+		o.setNumeroOrden(3996673L);
+		o.setSucursal("CENTRO");
+		o.setPasillo("PASILLO 2");
+		ordenesDeCompra.add(o);
 		return ordenesDeCompra;
 	}
 
@@ -160,28 +150,23 @@ public class PickingService {
 			String user, String pass) throws AppException, BusinessException {
 		List<PedidoDeReposicionAsignado> pedidosDeReposicion = new ArrayList<PedidoDeReposicionAsignado>();
 		PedidoDeReposicionAsignado pr = new PedidoDeReposicionAsignado();
-		try {
-			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("10/01/2015").getTime()));
-			pr.setNumeroPedido(4545654L);
-			pr.setSucursal("VILLA MORRA");
-			pr.setPasillo("PASILLO 1");
-			pedidosDeReposicion.add(pr);
-			pr = new PedidoDeReposicionAsignado();
-			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			pr.setNumeroPedido(4545655L);
-			pr.setSucursal("CENTRO");
-			pr.setPasillo("PASILLO 2");
-			pedidosDeReposicion.add(pr);
-			pr = new PedidoDeReposicionAsignado();
-			pr.setFechaPedido(new java.sql.Date(DateUtil.parseDate("19/01/2015").getTime()));
-			pr.setNumeroPedido(4545656L);
-			pr.setSucursal("SAN LORENZO");
-			pr.setPasillo("PASILLO 3");
-			pedidosDeReposicion.add(pr);
-		} catch (DateParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		pr.setFechaPedido(new java.sql.Date(2015,10,01));
+		pr.setNumeroPedido(4545654L);
+		pr.setSucursal("VILLA MORRA");
+		pr.setPasillo("PASILLO 1");
+		pedidosDeReposicion.add(pr);
+		pr = new PedidoDeReposicionAsignado();
+		pr.setFechaPedido(new java.sql.Date(2015,01,19));
+		pr.setNumeroPedido(4545655L);
+		pr.setSucursal("CENTRO");
+		pr.setPasillo("PASILLO 2");
+		pedidosDeReposicion.add(pr);
+		pr = new PedidoDeReposicionAsignado();
+		pr.setFechaPedido(new java.sql.Date(2015,01,19));
+		pr.setNumeroPedido(4545656L);
+		pr.setSucursal("SAN LORENZO");
+		pr.setPasillo("PASILLO 3");
+		pedidosDeReposicion.add(pr);
 		return pedidosDeReposicion;
 	}
 

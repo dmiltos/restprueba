@@ -3,7 +3,7 @@ package py.com.catedral.core.config;
 public interface Configuration {
 
 	/**
-	 * Devuelve la cadena de conexión a la BD
+	 * Devuelve la cadena de conexion a la BD
 	 * @return
 	 */
     public String getJdbcURL();
@@ -21,13 +21,13 @@ public interface Configuration {
 	public String getJdbcDialect();
 	
 	/**
-	 * Devuelve el esquema al cual se tendrá que conectar
+	 * Devuelve el esquema al cual se tendra que conectar
 	 * @return
 	 */
 	public String getJdbcSchema();
 	
 	/**
-	 * Devuelve el tamaño del pool de conexiones
+	 * Devuelve el tamaÃ±o del pool de conexiones
 	 * @return
 	 */
 	public String getConnectionPoolSize();

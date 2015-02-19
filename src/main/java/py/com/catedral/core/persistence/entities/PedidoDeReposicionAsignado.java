@@ -25,8 +25,8 @@ import javax.persistence.NamedNativeQuery;
 import javax.validation.constraints.NotNull;
 
 /**
- * Esta clase representa la entidad Pedido de Reposición Asignado.
- * Es utilizada para mostrar los datos de un pedido de reposición asignado
+ * Esta clase representa la entidad Pedido de Reposicion Asignado.
+ * Es utilizada para mostrar los datos de un pedido de reposicion asignado
  * a un empleado, asi como el pasillo, en el proceso de picking
  * 
  * @author Pablo
