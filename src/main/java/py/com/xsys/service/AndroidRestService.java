@@ -1,6 +1,9 @@
 package py.com.xsys.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,7 +14,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.omg.CORBA.NameValuePair;
+
 import py.com.xsys.model.Producto;
+import py.com.xsys.model.Producto.Red;
 import py.com.xsys.model.Usuario;
 
 @Path("/")
@@ -41,7 +47,17 @@ public class AndroidRestService {
 		producto.setId(100);
 		producto.setFabricante("google");
 		producto.setModelo("nexus4");
+		producto.setRed(Red.LTE);
+		producto.addFuncionalidad("GPS");
+		producto.addFuncionalidad("Touch");
+		producto.addFuncionalidad("NFC");
+		Usuario user = new Usuario();
+		user.setUsuario("derlis");
+		user.setPassword("1234");
+		producto.setUsuario(user);
 		productos.add(producto);
+		
+		
 		producto = new Producto();
 		producto.setId(200);
 		producto.setFabricante("samsung");
@@ -58,6 +74,10 @@ public class AndroidRestService {
 		producto.setModelo("firephone");
 		productos.add(producto);
 		
-		return Response.ok().entity(productos).build();
+		
+		Map<String, List<Producto>> map = new HashMap<String, List<Producto>>();
+		map.put("productos", productos);
+		
+		return Response.ok().entity(map).build();
 	}
 }
