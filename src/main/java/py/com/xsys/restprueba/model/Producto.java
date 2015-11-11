@@ -1,4 +1,4 @@
-package py.com.xsys.model;
+package py.com.xsys.restprueba.model;
 
 import java.util.ArrayList;
 import java.util.List;

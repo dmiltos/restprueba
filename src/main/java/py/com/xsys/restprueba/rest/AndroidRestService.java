@@ -1,4 +1,4 @@
-package py.com.xsys.service;
+package py.com.xsys.restprueba.rest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +16,9 @@ import javax.ws.rs.core.Response.Status;
 
 import org.omg.CORBA.NameValuePair;
 
-import py.com.xsys.model.Producto;
-import py.com.xsys.model.Producto.Red;
-import py.com.xsys.model.Usuario;
+import py.com.xsys.restprueba.model.Producto;
+import py.com.xsys.restprueba.model.Usuario;
+import py.com.xsys.restprueba.model.Producto.Red;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,6 +43,7 @@ public class AndroidRestService {
 	public Response getDatos() {
 		
 		ArrayList<Producto> productos = new ArrayList<Producto>();
+		
 		Producto producto = new Producto();
 		producto.setId(100);
 		producto.setFabricante("google");
@@ -57,17 +58,21 @@ public class AndroidRestService {
 		producto.setUsuario(user);
 		productos.add(producto);
 		
-		
 		producto = new Producto();
 		producto.setId(200);
 		producto.setFabricante("samsung");
 		producto.setModelo("galaxy S5");
+		producto.setRed(Red.GSM);
+		producto.addFuncionalidad("GPS");
+		producto.addFuncionalidad("Touch");
 		productos.add(producto);
+		
 		producto = new Producto();
 		producto.setId(300);
 		producto.setFabricante("sony");
 		producto.setModelo("xperia");
 		productos.add(producto);
+		
 		producto = new Producto();
 		producto.setId(400);
 		producto.setFabricante("amazon");
