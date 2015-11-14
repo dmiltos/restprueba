@@ -10,17 +10,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/decirhola")
+@Path("/saludar")
 @Produces(MediaType.APPLICATION_JSON)
-public class ResourceRESTtService {
+public class ResourceRESTService {
 	
 	@GET
 	@Path("/{param}") 
-	public Response getDatos(@PathParam("param") String param) {
+	public Response getSaludo(@PathParam("param") String param) {
 		
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("Hola: ", param);
+		Map<String, String> resultado = new HashMap<String, String>();
+		resultado.put("hola", param);
 		
-		return Response.ok().entity(map).build();
+		return Response.ok().entity(resultado).build();
 	}
 }
