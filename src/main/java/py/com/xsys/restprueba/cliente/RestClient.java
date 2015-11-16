@@ -12,8 +12,8 @@ import com.sun.jersey.api.client.WebResource;
 public class RestClient {
 	
 //Cambiar por la url que provee la informacion
-//	public static final String URL = "http://localhost:8080/restproductos/rest/productos";
-	public static final String URL = "http://www.google.com";
+	public static final String URL = "http://localhost:8080/restproductos/rest/productos";
+//	public static final String URL = "http://www.google.com";
 	
 	public static void main(String[] args) {
 		try {
@@ -48,7 +48,7 @@ public class RestClient {
 						String fabricante = (String) item.get("fabricante");
 						String modelo = (String) item.get("modelo");
 						JSONObject usuario = (JSONObject) item.get("usuario");
-						Object nombre = usuario.get("usuario");
+						Object nombre = usuario.get("nombre");
 						Object apellido = usuario.get("apellido");
 						JSONArray funcionalidades = (JSONArray) item.get("funcionalidades");
 						
